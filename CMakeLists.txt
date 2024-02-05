@@ -1,6 +1,8 @@
 ﻿cmake_minimum_required(VERSION 3.16)
 project(physicsim LANGUAGES CXX)
 
+enable_testing()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
@@ -15,6 +17,8 @@ add_library(physicsim
     "include/physicsim/physicsim.hpp" 
     "src/physicsim.cpp")
 
-target_include_directories(physicsim PRIVATE ${SFML_SOURCE_DIR}/include)
+target_include_directories(physicsim PUBLIC "${CMAKE_SOURCE_DIR}/include")
 target_link_libraries(physicsim PRIVATE sfml-graphics sfml-window)
 target_compile_features(physicsim PRIVATE cxx_std_17)
+
+add_subdirectory(tests)
