@@ -15,7 +15,9 @@ FetchContent_MakeAvailable(SFML)
 # Create the physicsim library
 add_library(physicsim 
     "include/physicsim/physicsim.hpp" 
-    "src/physicsim.cpp")
+     "src/vector.cpp"
+    "src/render.cpp"    
+ "src/matrix.cpp")
 
 target_include_directories(physicsim PUBLIC "${CMAKE_SOURCE_DIR}/include")
 target_link_libraries(physicsim PRIVATE sfml-graphics sfml-window)

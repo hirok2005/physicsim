@@ -1,12 +1,11 @@
-﻿// physicsim.h
+﻿// physicsim.hpp
 
-#ifndef PHYSICSIM_H
-#define PHYSICSIM_H
+#ifndef PHYSICSIM_HPP
+#define PHYSICSIM_HPP
 
-namespace physicsim {
+#include "vector.hpp"
+#include "render.hpp"
 
-    void foo();
+namespace physicsim {}
 
-} // namespace physicsim
-
-#endif // PHYSICSIM_H
+#endif // PHYSICSIM_HPP
