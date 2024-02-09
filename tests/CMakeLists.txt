@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Add the executable for the test
-add_executable(tester "test1.cpp")
+add_executable(tester "test1.cpp" )
 
 # Include directories for the tester executable
 target_include_directories(tester PRIVATE "${CMAKE_SOURCE_DIR}/include")

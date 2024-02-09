@@ -7,8 +7,7 @@ namespace physicsim {
             "Hello World");
         sf::CircleShape shape(200);
         sf::RectangleShape shape2(sf::Vector2f(100, 100));
-        while (window.isOpen())
-        {
+        while (window.isOpen()) {
             sf::Event event;
             while (
                 window.pollEvent(event))

@@ -1,5 +1,5 @@
 #ifndef PHYSICSIM_RENDER_HPP
-#define PHYSICSIM_REMDER_HPP
+#define PHYSICSIM_RENDER_HPP
 
 #include "physicsim.hpp"
 #include <SFML/Window.hpp>
