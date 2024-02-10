@@ -1,8 +1,6 @@
 #ifndef PHYSICSIM_VECTOR2_HPP
 #define PHYSICSIM_VECTOR2_HPP
 
-#include "physicsim.hpp"
-
 namespace physicsim {
 	class Vector2 {
 		public:

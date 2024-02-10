@@ -3,6 +3,7 @@
 //		make returning stuff consistent
 
 #include "physicsim/matrix.hpp"
+#
 
 physicsim::Matrix::Matrix(int rows, int cols) {
 	this->rows = rows; this->cols = cols;
@@ -29,7 +30,7 @@ physicsim::Matrix physicsim::Matrix::transpose() {
 
 physicsim::Matrix physicsim::Matrix::operator+(const Matrix& other) const {
 	if (this->rows != other.rows || this->cols != other.cols) {
-		throw _matherr;
+		throw std::invalid_argument("both matrices must have same size");
 	}
 	physicsim::Matrix t(this->rows, this->cols);
 
