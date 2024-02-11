@@ -3,9 +3,21 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include "world.hpp"
 
+
+
+// 1 pixel = 10 metres?
 namespace physicsim {
-	void runRenderLoop();
+	class Renderer {
+		public:
+			World* sim;
+			int width, height;
+
+			Renderer(World* sim);
+			void update();
+	};
+
 }
 
 #endif // PHYSICSIM_RENDER_HPP

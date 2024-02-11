@@ -4,8 +4,6 @@
 #ifndef PHYSICSIM_MATRIX_HPP
 #define PHYSICSIM_MATRIX_HPP
 
-#include "physicsim.hpp"
-
 namespace physicsim {
 	class Matrix {
 		public:
@@ -14,6 +12,7 @@ namespace physicsim {
 			Matrix(int rows, int cols);
 			void insert(int row, int col, float val);
 			float retrieve(int row, int col) const;
+			void swapRows(int row1, int row2);
 			Matrix transpose();
 			Matrix operator+(const Matrix& other) const;
 			Matrix operator-(const Matrix& other) const;
