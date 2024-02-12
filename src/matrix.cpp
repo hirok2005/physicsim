@@ -5,6 +5,11 @@
 #include "physicsim/matrix.hpp"
 #include <stdexcept>
 
+physicsim::Matrix::Matrix() {
+	this->rows = 0; this->cols = 0;
+	this->arr = nullptr;
+}
+
 physicsim::Matrix::Matrix(int rows, int cols) {
 	this->rows = rows; this->cols = cols;
 	this->arr = new float[rows * cols];

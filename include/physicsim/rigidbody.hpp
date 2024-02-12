@@ -3,12 +3,19 @@
 
 #include "matrix.hpp"
 
+//TODO:	alter position based on velocity and timedelta
+//	time variables for calculating delta
+
 namespace physicsim {
 	class RigidBody {
-		public:
+		private:
 			float m, theta;
-			Matrix pos;
+			Matrix pos, vel;
+		public:
 			RigidBody(float x, float y, float m, float theta);
+			~RigidBody() = default;
+
+			void addImpulse(Matrix i);
 	};
 }
 
