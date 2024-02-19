@@ -5,16 +5,20 @@
 #ifndef PHYSICSIM_MATRIX_HPP
 #define PHYSICSIM_MATRIX_HPP
 
+#include <initializer_list>
+
 namespace physicsim {
 	class Matrix {
-		public:
+		private:
 			int rows; int cols;
 			float* arr; // matrix is stored as 1 contiguous array
+		public:
 			Matrix(); //default constructor, sets rows and cols to zero
 			Matrix(int rows, int cols);
-			Matrix(int rows, int cols, float* arr); //second constructor for when you have all values, consider std::initialiser_list
-			void insert(int row, int col, float val);
-			float retrieve(int row, int col) const;
+			Matrix(int rows, int cols, std::initializer_list<float> vals); //second constructor for when you have all values, consider std::initialiser_list
+			void insert(int row, int col, float val); //deprecated with []
+			
+			float retrieve(int row, int col) const; //deprecated with []
 			void swapRows(int row1, int row2);
 			Matrix transpose();
 
@@ -24,6 +28,8 @@ namespace physicsim {
 			Matrix operator+(const Matrix& other) const; //maybe some +=, +=, etc operators would be nice
 			Matrix operator-(const Matrix& other) const;
 			Matrix operator*(const Matrix& other) const;
+			float& operator()(const int col, const int row); //only c++23 has multi parameter operator[]
+			const float& operator()(const int col, const int row) const;
 
 			int boundsCheck(int row, int col); //private method
 	};

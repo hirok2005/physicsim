@@ -15,6 +15,17 @@ physicsim::Matrix::Matrix(int rows, int cols) {
 	this->arr = new float[rows * cols];
 }
 
+physicsim::Matrix::Matrix(int rows, int cols, std::initializer_list<float> vals) {
+	if(vals.size() != rows * cols) {
+		throw std::out_of_range("initialiser list does not match matrix dimensions");
+	}
+	this->rows = rows; this->cols = cols;
+	this->arr = new float[rows * cols];
+	for(int i{}; i < rows * cols; i++) {
+		this->arr[i] = *(vals.begin() + i); //pointer/iterator magic
+	}
+}
+
 void physicsim::Matrix::insert(int row, int col, float val) {
 	this->arr[row * this->cols + col] = val;
 }
@@ -41,7 +52,7 @@ physicsim::Matrix physicsim::Matrix::transpose() {
 	physicsim::Matrix t(this->cols, this->rows);
 	for (int i = 0; i < this->rows; i++) {
 		for (int j = 0; j < this->cols; j++) {
-			t.insert(j, i, this->retrieve(i, j));
+			t.insert(j, i, this->retrieve(i, j)); //t(j, i) = (*this)(i, j);
 		}
 	}
 	return t;
@@ -94,4 +105,9 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 	}
 
 	return t;
+}
+
+float& physicsim::Matrix::operator()(const int col, const int row) {
+	//add handling for out of index out of bonds
+	return this->arr[row * this->cols + col];
 }
