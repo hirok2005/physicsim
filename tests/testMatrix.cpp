@@ -5,6 +5,18 @@
 int main() {
 	physicsim::Matrix t(3, 3);
 
+	physicsim::Matrix a(2, 2, {0,0,0,0});
+	a(1,1) = 5;
+
+	std::cout << a.retrieve(1,1) << std::endl;
+
+	try {
+		physicsim::Matrix b(2, 2, {1,1,1,1,1});
+	}
+	catch (std::exception e) {
+		std::cout << "error" << std::endl;
+	}
+
 	int x = 0;
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 3; ++j) {

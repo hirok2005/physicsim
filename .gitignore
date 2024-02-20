@@ -2,3 +2,11 @@ out/
 build/
 
 .vs
+
+bin/
+CMakeFiles/
+_deps/
+CMakeCache.txt
+*.cmake
+*.a
+Makefile

@@ -35,6 +35,6 @@ add_library(physicsim
 
 target_include_directories(physicsim PUBLIC "${CMAKE_SOURCE_DIR}/include")
 target_link_libraries(physicsim PRIVATE sfml-graphics sfml-window)
-target_compile_features(physicsim PRIVATE cxx_std_17)
+target_compile_features(physicsim PRIVATE cxx_std_23)
 
 add_subdirectory(tests)
