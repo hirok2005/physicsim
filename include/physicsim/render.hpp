@@ -7,7 +7,7 @@
 
 
 
-// 1 pixel = 10 metres?
+// 1 pixel = 0.5 metres?
 namespace physicsim {
 	class Renderer {
 		public:
@@ -16,6 +16,8 @@ namespace physicsim {
 
 			Renderer(World* sim);
 			void update();
+		private:
+			sf::RenderWindow window;
 	};
 
 }

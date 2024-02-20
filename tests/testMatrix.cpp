@@ -54,6 +54,14 @@ int main() {
 		std::cout << std::endl;
 	}
 
+	// physicsim::RigidBody a(1, 2, 3, 4, 5, 6);
+
+	// std::cout << a.pos->retrieve(2, 1);
+
+
+	physicsim::Matrix b(1, 1, { 1 });
+
+
 	return 0;
 
 }
