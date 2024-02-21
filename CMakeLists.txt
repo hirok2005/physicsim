@@ -31,6 +31,7 @@ add_library(physicsim
     "src/render.cpp"
     "src/matrix.cpp"
     "src/rigidbody.cpp"
+    "src/world.cpp"
 )
 
 target_include_directories(physicsim PUBLIC "${CMAKE_SOURCE_DIR}/include")

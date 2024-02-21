@@ -3,4 +3,4 @@
 
 Basic 2D physics engine
 
-Units are in metres
+Units are in centimeters

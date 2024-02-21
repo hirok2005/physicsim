@@ -31,11 +31,14 @@ void physicsim::Matrix::insert(int row, int col, float val) {
 }
 
 float physicsim::Matrix::retrieve(int row, int col) const{
+	if (row < 0 || row > this->rows || cols < 0 || col> this->cols) {
+		throw std::invalid_argument("out of bounds");
+	}
 	return this->arr[row * this->cols + col];
 }
  
 void physicsim::Matrix::swapRows(int row1, int row2) {
-	if (row1 < 1 || row1 > this->rows || row2 < 1 || row2 > this->rows) {
+	if (row1 < 0 || row1 > this->rows || row2 < 0 || row2 > this->rows) {
 		throw std::invalid_argument("row out of bounds");
 	}
 
@@ -58,16 +61,40 @@ physicsim::Matrix physicsim::Matrix::transpose() {
 	return t;
 }
 
+physicsim::Matrix physicsim::Matrix::scalarMultiply(float lambda) const {
+	physicsim::Matrix t(this->cols, this->rows);
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		t.arr[i] = this->arr[i] * lambda;
+	}
+	return t;
+}
+
+physicsim::Matrix physicsim::Matrix::scalarDivide(float lambda) const {
+	physicsim::Matrix t(this->cols, this->rows);
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		t.arr[i] = this->arr[i] / lambda;
+	}
+	return t;
+}
+
 physicsim::Matrix physicsim::Matrix::operator+(const Matrix& other) const {
 	if (this->rows != other.rows || this->cols != other.cols) {
 		throw std::invalid_argument("both matrices must have same size");
 	}
 	physicsim::Matrix t(this->rows, this->cols);
 
-	for (int i = 0; i < this->rows; i++) {
-		for (int j = 0; j < this->cols; j++) {
-			t.insert(i, j, this->retrieve(i, j) + other.retrieve(i, j));
-		}
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		t.arr[i] = this->arr[i]+ other.arr[i];
+	}
+
+	return t;
+}
+
+physicsim::Matrix physicsim::Matrix::operator+(const float& scalar) const {
+	physicsim::Matrix t(this->rows, this->cols);
+
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		t.arr[i] = this->arr[i] + scalar;
 	}
 
 	return t;
@@ -79,10 +106,8 @@ physicsim::Matrix physicsim::Matrix::operator-(const Matrix& other) const {
 	}
 	physicsim::Matrix t(this->rows, this->cols);
 
-	for (int i = 0; i < this->rows; i++) {
-		for (int j = 0; j < this->cols; j++) {
-			t.insert(i, j, this->retrieve(i, j) - other.retrieve(i, j));
-		}
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		t.arr[i] = this->arr[i] - other.arr[i];
 	}
 
 	return t;
@@ -110,4 +135,18 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 float& physicsim::Matrix::operator()(const int col, const int row) {
 	//add handling for out of index out of bonds
 	return this->arr[row * this->cols + col];
+}
+
+int physicsim::Matrix::getRows() const {
+	return this->rows;
+}
+
+int physicsim::Matrix::getCols() const {
+	return this->cols;
+}
+
+physicsim::Matrix physicsim::Matrix::rotationMat2D(float theta)
+{
+	float cTheta = std::cos(theta); float sTheta = std::sin(theta);
+	return physicsim::Matrix(2, 2, { cTheta, -sTheta, sTheta, cTheta });
 }

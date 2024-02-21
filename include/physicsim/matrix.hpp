@@ -6,6 +6,7 @@
 #define PHYSICSIM_MATRIX_HPP
 
 #include <initializer_list>
+#include <cmath>
 
 namespace physicsim {
 	class Matrix {
@@ -26,10 +27,14 @@ namespace physicsim {
 			Matrix scalarDivide(float lambda) const; //shorthand for easier usage, essentially just matrix.scalarMultiply(1/lambda)
 
 			Matrix operator+(const Matrix& other) const; //maybe some +=, +=, etc operators would be nice
+			Matrix operator+(const float& scalar) const;
 			Matrix operator-(const Matrix& other) const;
 			Matrix operator*(const Matrix& other) const;
 			float& operator()(const int col, const int row); //only c++23 has multi parameter operator[]
 			const float& operator()(const int col, const int row) const;
+			int getRows() const;
+			int getCols() const;
+			static Matrix rotationMat2D(float theta);
 
 			int boundsCheck(int row, int col); //private method
 	};

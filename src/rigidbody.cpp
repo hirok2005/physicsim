@@ -1,11 +1,11 @@
 #include "physicsim/rigidbody.hpp"
 #include "physicsim/matrix.hpp"
-
+#include <stdexcept>
 
 
 
 physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, physicsim::Shape type) {
-	this->pos = physicsim::Matrix(2, 1); //set x and y values
+	this->pos = physicsim::Matrix(2, 1, {x, y}); //set x and y values
 	this->m = m;
 	this->theta = theta;
 	this->lVel = physicsim::Matrix(2, 1);
@@ -13,7 +13,29 @@ physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, physicsi
 	this->type = type;
 }
 
-physicsim::Shape physicsim::RigidBody::getType() {
+physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float w, float h)
+	: vertices{ { 2, 1, {-w / 2, h / 2} }, { 2, 1, { w / 2, h / 2 } }, { 2, 1, { w / 2, -h / 2 } }, { 2, 1, { -w / 2, -h / 2 } } },
+	pos(2, 1, { x, y }),
+	m(m),
+	theta(theta),
+	lVel(2, 1),
+	aVel(0),
+	w(w),
+	h(h),
+	type(physicsim::Rectangle) {
+}
+
+physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float r)
+	: pos(2, 1, { x, y }),
+	m(m),
+	theta(theta),
+	lVel(2, 1),
+	aVel(0),
+	w(w),
+	h(h),
+	type(physicsim::Circle) {
+}
+physicsim::Shape physicsim::RigidBody::getType() const {
 	return this->type;
 }
 
@@ -22,13 +44,35 @@ void physicsim::RigidBody::addImpulse(physicsim::Matrix i) {
 }
 
 
-physicsim::RigidRect::RigidRect(float x, float y, float m, float theta, float w, float h) : physicsim::RigidBody(x, y, m, theta, physicsim::Rectangle), vertices { physicsim::Matrix(2, 1, {-w / 2, h / 2}),
-																																			 physicsim::Matrix(2, 1, {w / 2, h / 2}),
-																																			 physicsim::Matrix(2, 1, {w / 2, -h / 2}),
-																																			 physicsim::Matrix(2, 1, {-w / 2, -h / 2}) } {
-	this->w = w; this->h = h;
+float physicsim::RigidBody::getH() const {
+	if (this->type == physicsim::Circle) {
+		return -1;
+	}
+	return this->h;
 }
 
-physicsim::RigidCircle::RigidCircle(float x, float y, float m, float theta, float r) : physicsim::RigidBody(x, y, m, theta, physicsim::Circle) {
-	this->r = r;
+float physicsim::RigidBody::getW() const {
+	if (this->type == physicsim::Circle) {
+		return -1;
+	}
+	return this->w;
+}
+
+float physicsim::RigidBody::getR() const {
+	if (this->type == physicsim::Rectangle) {
+		return -1;
+	}
+	return this->r;
+}
+
+float physicsim::RigidBody::getT() const {
+	return this->theta;
+}
+
+physicsim::Matrix(*physicsim::RigidBody::getVertices()) [4] {
+	return &this->vertices;
+}
+
+physicsim::Matrix physicsim::RigidBody::getPos() const {
+	return this->pos;
 }

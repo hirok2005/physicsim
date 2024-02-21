@@ -10,32 +10,31 @@ namespace physicsim {
 	enum Shape {Circle, Rectangle, Default};
 
 	class RigidBody {
-		private:
+		protected:
 			float m, theta, aVel;
 			Matrix pos, lVel;
 			Shape type;
-		public:
-			RigidBody(float x, float y, float m, float theta, Shape type);
-			~RigidBody() = default;
-			Shape getType();
-			void addImpulse(Matrix i);
-	};
 
-	class RigidRect : public RigidBody {
-		private:
-			float w, h;
+			// for circles
+			float r = NULL;
+
+			// for rects
+			float w = NULL, h = NULL;
 			Matrix vertices[4]; // local coords
 		public:
-			RigidRect(float x, float y, float m, float theta, float w, float h);
+			RigidBody(float x, float y, float m, float theta, Shape type);
+			RigidBody(float x, float y, float m, float theta, float w, float h);
+			RigidBody(float x, float y, float m, float theta, float r);
+			~RigidBody() = default;
+			Shape getType() const;
+			float getW() const;
+			float getH() const;
+			float getR() const;
+			float getT() const;
+			void addImpulse(Matrix i);
+			Matrix(*getVertices()) [4];
+			Matrix getPos() const;
 	};
-
-	class RigidCircle : public RigidBody {
-		private:
-			float r;
-		public:
-			RigidCircle(float x, float y, float m, float theta, float r);
-	};
-
 }
 
 #endif // PHYSICSIM_RIGIDBODY_HPP
