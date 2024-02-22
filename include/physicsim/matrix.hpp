@@ -17,9 +17,7 @@ namespace physicsim {
 			Matrix(); //default constructor, sets rows and cols to zero
 			Matrix(int rows, int cols);
 			Matrix(int rows, int cols, std::initializer_list<float> vals); //second constructor for when you have all values, consider std::initialiser_list
-			void insert(int row, int col, float val); //deprecated with []
 			
-			float retrieve(int row, int col) const; //deprecated with []
 			void swapRows(int row1, int row2);
 			Matrix transpose();
 
@@ -30,13 +28,19 @@ namespace physicsim {
 			Matrix operator+(const float& scalar) const;
 			Matrix operator-(const Matrix& other) const;
 			Matrix operator*(const Matrix& other) const;
-			float& operator()(const int col, const int row); //only c++23 has multi parameter operator[]
-			const float& operator()(const int col, const int row) const;
+			float& operator()(const int row, const int col); //only c++23 has multi parameter operator[]
+			const float& operator()(const int row, const int col) const;
+			//maybe an index operator to return a row?
+
 			int getRows() const;
 			int getCols() const;
 			static Matrix rotationMat2D(float theta);
 
-			int boundsCheck(int row, int col); //private method
+			int rowOutOfBounds(int row) const;
+			int colOutOfBounds(int col) const;
+			int indexOutOfBounds(int row, int col) const; //private method
+			
+			~Matrix() = default;
 	};
 }
 

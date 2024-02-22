@@ -25,28 +25,17 @@ physicsim::Matrix::Matrix(int rows, int cols, std::initializer_list<float> vals)
 		this->arr[i] = *(vals.begin() + i); //pointer/iterator magic
 	}
 }
-
-void physicsim::Matrix::insert(int row, int col, float val) {
-	this->arr[row * this->cols + col] = val;
-}
-
-float physicsim::Matrix::retrieve(int row, int col) const{
-	if (row < 0 || row > this->rows || cols < 0 || col> this->cols) {
-		throw std::invalid_argument("out of bounds");
-	}
-	return this->arr[row * this->cols + col];
-}
  
 void physicsim::Matrix::swapRows(int row1, int row2) {
-	if (row1 < 0 || row1 > this->rows || row2 < 0 || row2 > this->rows) {
+	if (row1 < 0 || row1 > this->rows || row2 < 0 || row2 > this->rows) { //change with bounds checks for individual rows
 		throw std::invalid_argument("row out of bounds");
 	}
 
 	float t;
 	for (int i = 0; i < this->cols; i++) {
-		t = this->retrieve(row1, i);
-		this->insert(row1, i, this->retrieve(rows, i));
-		this->insert(row2, i, t);
+		t = (*this)(row1, i);
+		(*this)(row1, i) = (*this)(rows, i);
+		(*this)(row2, i) = t;
 	}
 
 }
@@ -55,7 +44,7 @@ physicsim::Matrix physicsim::Matrix::transpose() {
 	physicsim::Matrix t(this->cols, this->rows);
 	for (int i = 0; i < this->rows; i++) {
 		for (int j = 0; j < this->cols; j++) {
-			t.insert(j, i, this->retrieve(i, j)); //t(j, i) = (*this)(i, j);
+			t(j, i) = (*this)(i, j);
 		}
 	}
 	return t;
@@ -123,18 +112,27 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 		for (int rightCol = 0; rightCol < other.cols; rightCol++) {
 			runningTot = 0;
 			for (int leftCol = 0; leftCol < this->cols; leftCol++) {
-				runningTot += this->retrieve(leftRow, leftCol) * other.retrieve(leftCol, rightCol);
+				runningTot += (*this)(leftRow, leftCol) * other(leftCol, rightCol);
 			}
-			t.insert(leftRow, rightCol, runningTot);
+			t(leftRow, rightCol) = runningTot;
 		}
 	}
 
 	return t;
 }
 
-float& physicsim::Matrix::operator()(const int col, const int row) {
-	//add handling for out of index out of bonds
-	return this->arr[row * this->cols + col];
+float& physicsim::Matrix::operator()(const int row, const int col) {
+	if(!this->indexOutOfBounds(row, col)) {
+		return this->arr[row * this->cols + col];
+	}
+	throw std::out_of_range("Index out of bounds"); //add more personalised error message later
+}
+
+const float& physicsim::Matrix::operator()(const int row, const int col) const {
+	if(!this->indexOutOfBounds(row, col)) {
+		return this->arr[row * this->cols + col];
+	}
+	throw std::out_of_range("Index out of bounds");
 }
 
 int physicsim::Matrix::getRows() const {
@@ -150,3 +148,16 @@ physicsim::Matrix physicsim::Matrix::rotationMat2D(float theta)
 	float cTheta = std::cos(theta); float sTheta = std::sin(theta);
 	return physicsim::Matrix(2, 2, { cTheta, -sTheta, sTheta, cTheta });
 }
+
+int physicsim::Matrix::indexOutOfBounds(int row, int col) const {
+	if (this->cols > col && this->rows > row) {
+		return 0;
+	}
+	return 1;
+}
+
+/*physicsim::Matrix::~Matrix() {
+	if (arr != nullptr) {
+		delete[] arr;
+	}
+}*/
