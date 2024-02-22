@@ -1,3 +1,7 @@
+// todo:
+//		choose a good scale
+//		adding/removing objects to renderer after construction
+
 #include "physicsim/render.hpp"
 #include "physicsim/world.hpp"
 #include <iostream>
