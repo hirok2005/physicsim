@@ -17,7 +17,7 @@ namespace physicsim {
 			Matrix(); //default constructor, sets rows and cols to zero
 			Matrix(int rows, int cols);
 			Matrix(int rows, int cols, std::initializer_list<float> vals); //second constructor for when you have all values, consider std::initialiser_list
-			
+			//make copy constructors
 			void swapRows(int row1, int row2);
 			Matrix transpose();
 
@@ -40,6 +40,8 @@ namespace physicsim {
 			int colOutOfBounds(int col) const;
 			int indexOutOfBounds(int row, int col) const; //private method
 			
+			void print() const;
+
 			~Matrix() = default;
 	};
 }

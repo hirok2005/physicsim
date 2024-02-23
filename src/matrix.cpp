@@ -4,6 +4,7 @@
 
 #include "physicsim/matrix.hpp"
 #include <stdexcept>
+#include <iostream>
 
 /*! Default constructor for Matrix class
  * sets rows and cols to 0, and arr to nullptr
@@ -17,11 +18,19 @@ physicsim::Matrix::Matrix() {
 	this->arr = nullptr;
 }
 
+/*! Construct empty matrix with specified rows and columns
+ * uninitialised values
+ *
+ * TODO: change to zeros
+ */
 physicsim::Matrix::Matrix(int rows, int cols) {
 	this->rows = rows; this->cols = cols;
 	this->arr = new float[rows * cols];
 }
 
+/*! Construct matrix with specified rows and columns, and fill in  with specified values
+ * throws error if list does not match dimensions
+ */
 physicsim::Matrix::Matrix(int rows, int cols, std::initializer_list<float> vals) {
 	if(vals.size() != rows * cols) {
 		throw std::out_of_range("initialiser list does not match matrix dimensions");
@@ -32,7 +41,11 @@ physicsim::Matrix::Matrix(int rows, int cols, std::initializer_list<float> vals)
 		this->arr[i] = *(vals.begin() + i); //pointer/iterator magic
 	}
 }
- 
+
+/*! Swaps 2 rows of a matrix iterating through columns
+ *
+ * TODO: test to make sure no reference magic
+ */
 void physicsim::Matrix::swapRows(int row1, int row2) {
 	if (row1 < 0 || row1 > this->rows || row2 < 0 || row2 > this->rows) { //change with bounds checks for individual rows
 		throw std::invalid_argument("row out of bounds");
@@ -41,7 +54,7 @@ void physicsim::Matrix::swapRows(int row1, int row2) {
 	float t;
 	for (int i = 0; i < this->cols; i++) {
 		t = (*this)(row1, i);
-		(*this)(row1, i) = (*this)(rows, i);
+		(*this)(row1, i) = (*this)(row2, i);
 		(*this)(row2, i) = t;
 	}
 
@@ -161,6 +174,15 @@ int physicsim::Matrix::indexOutOfBounds(int row, int col) const {
 		return 0;
 	}
 	return 1;
+}
+
+void physicsim::Matrix::print() const {
+	for(int i{}; i < this->rows; i++) {
+		for(int j{}; j < this->cols; j++) {
+			std::cout << (*this)(i, j) << " ";
+		}
+		std::cout << std::endl;
+	}
 }
 
 /*physicsim::Matrix::~Matrix() {

@@ -10,6 +10,11 @@ int main() {
 
 	std::cout << a(1, 1) << std::endl;
 
+	physicsim::Matrix one(3, 3, {1,1,1,2,2,2,3,3,3});
+	one.swapRows(0,1);
+
+	one.print();
+
 	try {
 		physicsim::Matrix b(2, 2, { 1,1,1,1 });
 	}
