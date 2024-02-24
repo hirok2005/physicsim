@@ -20,7 +20,7 @@ int main() {
 	physicsim::Matrix a(2, 2, { 0,0,0,0 });
 	a(1, 1) = 5;
 
-	std::cout << a.retrieve(1, 1) << std::endl;
+	std::cout << a(1, 1) << std::endl;
 
 	printMatrix(a);
 
@@ -34,7 +34,7 @@ int main() {
 	int x = 0;
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 3; ++j) {
-			t.insert(i, j, ++x);
+			t(i, j) = ++x;
 		}
 	}
 
@@ -46,13 +46,13 @@ int main() {
 
 	// ChatGPT generated
 	physicsim::Matrix m1(2, 3);
-	m1.insert(0, 0, 1); m1.insert(0, 1, 2); m1.insert(0, 2, 3);
-	m1.insert(1, 0, 4); m1.insert(1, 1, 5); m1.insert(1, 2, 6);
+	m1(0, 0) = 1; m1(0, 1) = 2; m1(0, 2) = 3;
+	m1(1, 0) = 4; m1(1, 1) = 5; m1(1, 2) = 6;
 
 	physicsim::Matrix m2(3, 2);
-	m2.insert(0, 0, 7); m2.insert(0, 1, 8);
-	m2.insert(1, 0, 9); m2.insert(1, 1, 10);
-	m2.insert(2, 0, 11); m2.insert(2, 1, 12);
+	m2(0, 0) = 7; m2(0, 1) = 8;
+	m2(1, 0) = 9; m2(1, 1) = 10;
+	m2(2, 0) = 11; m2(2, 1) = 12;
 
 	// Perform multiplication
 	physicsim::Matrix result = m1 * m2;
