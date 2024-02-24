@@ -5,6 +5,13 @@
 #include "physicsim/matrix.hpp"
 #include <stdexcept>
 
+/*! Default constructor for Matrix class
+ * sets rows and cols to 0, and arr to nullptr
+ *
+ * Be careful not to free this with nullptr
+ * 
+ * TODO: nullptr checks before indexing
+ */
 physicsim::Matrix::Matrix() {
 	this->rows = 0; this->cols = 0;
 	this->arr = nullptr;

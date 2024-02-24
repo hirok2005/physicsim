@@ -3,6 +3,8 @@ build/
 
 .vs
 
+html/
+latex/
 bin/
 CMakeFiles/
 _deps/
