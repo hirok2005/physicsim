@@ -28,7 +28,7 @@ void physicsim::Renderer::update() {
 	physicsim::Matrix pos;
 	for (int i = 0; i < this->shapes.size(); i++) {
 		pos = sim->bodies[i]->getPos();
-		this->shapes[i]->setPosition(pos(0, 0) * physicsim::SCALE, pos(1, 0) * physicsim::SCALE);
+		this->shapes[i]->setPosition(pos(0, 0) * physicsim::SCALE, this->height - pos(1, 0) * physicsim::SCALE);
 		this->shapes[i]->setRotation(sim->bodies[i]->getT());
 		window.draw(*this->shapes[i]);
 	}

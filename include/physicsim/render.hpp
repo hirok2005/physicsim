@@ -11,7 +11,7 @@
 // 1 pixel = 0.01 cm?
 namespace physicsim {
 
-	constexpr int SCALE = 100;
+	constexpr int SCALE = 10;
 
 	class Renderer {
 		public:

@@ -51,7 +51,7 @@ physicsim::Matrix physicsim::Matrix::transpose() {
 }
 
 physicsim::Matrix physicsim::Matrix::scalarMultiply(float lambda) const {
-	physicsim::Matrix t(this->cols, this->rows);
+	physicsim::Matrix t(this->rows, this->cols);
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		t.arr[i] = this->arr[i] * lambda;
 	}
@@ -59,7 +59,7 @@ physicsim::Matrix physicsim::Matrix::scalarMultiply(float lambda) const {
 }
 
 physicsim::Matrix physicsim::Matrix::scalarDivide(float lambda) const {
-	physicsim::Matrix t(this->cols, this->rows);
+	physicsim::Matrix t(this->rows, this->cols);
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		t.arr[i] = this->arr[i] / lambda;
 	}
@@ -102,6 +102,50 @@ physicsim::Matrix physicsim::Matrix::operator-(const Matrix& other) const {
 	return t;
 }
 
+physicsim::Matrix physicsim::Matrix::operator-(const float& scalar) const {
+	physicsim::Matrix t(this->rows, this->cols);
+
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		t.arr[i] = this->arr[i] - scalar;
+	}
+
+	return t;
+}
+
+
+void physicsim::Matrix::operator+=(const Matrix& other) {
+	if (this->rows != other.rows || this->cols != other.cols) {
+		throw std::invalid_argument("both matrices must have same size");
+	}
+
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		this->arr[i] += other.arr[i];
+	}
+}
+
+void physicsim::Matrix::operator+=(const float& scalar) {
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		this->arr[i] += scalar;
+	}
+}
+
+void physicsim::Matrix::operator-=(const Matrix& other) {
+	if (this->rows != other.rows || this->cols != other.cols) {
+		throw std::invalid_argument("both matrices must have same size");
+	}
+
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		this->arr[i] -= other.arr[i];
+	}
+}
+
+void physicsim::Matrix::operator-=(const float& scalar) {
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		this->arr[i] -= scalar;
+	}
+}
+
+
 physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 	if (this->cols != other.rows) {
 		throw std::invalid_argument("left matrix must have same number of columns as left matrix rows");
@@ -119,6 +163,12 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 	}
 
 	return t;
+}
+
+void physicsim::Matrix::operator=(const physicsim::Matrix& other) {
+	this->rows = other.getRows(); this->cols = other.getCols();
+	this->arr = new float[this->rows * this->cols];
+	std::copy(other.arr, other.arr + this->rows * this->cols, arr);
 }
 
 float& physicsim::Matrix::operator()(const int row, const int col) {
@@ -150,7 +200,7 @@ physicsim::Matrix physicsim::Matrix::rotationMat2D(float theta)
 }
 
 int physicsim::Matrix::indexOutOfBounds(int row, int col) const {
-	if (this->cols > col && this->rows > row) {
+	if (this->cols > col || this->rows > row) {
 		return 0;
 	}
 	return 1;

@@ -6,7 +6,11 @@ void physicsim::World::addBody(RigidBody* body) {
 	this->bodies.push_back(body);
 }
 
-
+void physicsim::World::step(float dt) {
+	for (int i = 0; i < this->bodies.size(); i++) {
+		this->bodies[i]->update(dt);
+	}
+}
 
 
 
