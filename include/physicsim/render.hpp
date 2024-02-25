@@ -8,20 +8,22 @@
 
 
 
-// 1 pixel = 0.01 cm?
 namespace physicsim {
 
-	constexpr int SCALE = 100;
+	constexpr int SCALE = 10;
 
 	class Renderer {
 		public:
 			World* sim;
 			int width, height;
 			std::vector<sf::Shape*> shapes;
+			bool showInfo;
 
-			Renderer(World* sim);
-			void update();
+			Renderer(World* sim, bool showFPS);
+			void update(const float& dt);
 			sf::RenderWindow window;
+			sf::Text info;
+			sf::Font font;
 	};
 
 }

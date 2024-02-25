@@ -1,5 +1,17 @@
 #include <physicsim/physicsim.hpp>
 #include <iostream>
+#include <cmath>
+
+
+void printMatrix(physicsim::Matrix mat) {
+	for (int i = 0; i < mat.getRows(); i++) {
+		for (int j = 0; j < mat.getCols(); j++) {
+			std::cout << mat(j, i) << ", ";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "\n";
+}
 
 
 int main() {
@@ -14,9 +26,10 @@ int main() {
 	one.swapRows(0,1);
 
 	one.print();
+	a.print();
 
 	try {
-		physicsim::Matrix b(2, 2, { 1,1,1,1 });
+		physicsim::Matrix b(2, 2, { 1,1,1,1,1 });
 	}
 	catch (std::exception e) {
 		std::cout << e.what() << std::endl;
@@ -29,24 +42,11 @@ int main() {
 		}
 	}
 
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			std::cout << t(i, j) << ", ";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
+	t.print();
 
 	t = t.transpose();
-
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			std::cout << t(i, j) << ", ";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-
+	
+	printMatrix(t);
 
 	// ChatGPT generated
 	physicsim::Matrix m1(2, 3);
@@ -64,20 +64,15 @@ int main() {
 	// 58, 64
 	// 139, 154
 
-	for (int i = 0; i < 2; ++i) {
-		for (int j = 0; j < 2; ++j) {
-			std::cout << result(i, j) << ", ";
-		}
-		std::cout << std::endl;
-	}
+	printMatrix(result);
 
-	// physicsim::RigidBody a(1, 2, 3, 4, 5, 6);
+	physicsim::Matrix rot = physicsim::Matrix::rotationMat2D(3.14159 / 2);
 
-	// std::cout << a.pos->retrieve(2, 1);
+	printMatrix(rot);
 
+	physicsim::Matrix b(3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
 
-	physicsim::Matrix b(1, 1, { 1 });
-
+	b.print();
 
 	return 0;
 

@@ -11,16 +11,17 @@ namespace physicsim {
 
 	class RigidBody {
 		protected:
-			float m, theta, aVel;
-			Matrix pos, lVel;
+			float m, theta, aVel, t; // mass, angle of rotation, angular velocity, torque
+			Matrix pos, lVel, f; // global position, linear velocities, forces
 			Shape type;
 
 			// for circles
-			float r = NULL;
+			float r = -1;
 
 			// for rects
-			float w = NULL, h = NULL;
+			float w = -1, h = -1;
 			Matrix vertices[4]; // local coords
+		
 		public:
 			RigidBody(float x, float y, float m, float theta, Shape type);
 			RigidBody(float x, float y, float m, float theta, float w, float h);
@@ -31,7 +32,16 @@ namespace physicsim {
 			float getH() const;
 			float getR() const;
 			float getT() const;
+			void setLVel(const Matrix& lVel);
+			void setF(const Matrix& f);
+			void setPos(const Matrix& pos);
+			void setTheta(const float& theta);
+			void addLVel(const Matrix& lVel);
+			void addF(const Matrix& f);
+			void addPos(const Matrix& pos);
+			void addTheta(const float& theta);
 			void addImpulse(Matrix i);
+			void update(float dt);
 			Matrix(*getVertices()) [4];
 			Matrix getPos() const;
 	};

@@ -12,8 +12,8 @@ namespace physicsim {
 	class Matrix {
 		private:
 			int rows; int cols;
-			float* arr; // matrix is stored as 1 contiguous array
 		public:
+			float* arr; // matrix is stored as 1 contiguous array
 			Matrix(); //default constructor, sets rows and cols to zero
 			Matrix(int rows, int cols);
 			Matrix(int rows, int cols, std::initializer_list<float> vals); //second constructor for when you have all values, consider std::initialiser_list
@@ -27,7 +27,13 @@ namespace physicsim {
 			Matrix operator+(const Matrix& other) const; //maybe some +=, +=, etc operators would be nice
 			Matrix operator+(const float& scalar) const; //all should return references
 			Matrix operator-(const Matrix& other) const;
+			Matrix operator-(const float& scalar) const;
+			void operator+=(const Matrix& other);
+			void operator+=(const float& scalar);
+			void operator-=(const Matrix& other);
+			void operator-=(const float& scalar);
 			Matrix operator*(const Matrix& other) const;
+			void operator=(const Matrix& other);
 			float& operator()(const int row, const int col); //only c++23 has multi parameter operator[]
 			const float& operator()(const int row, const int col) const;
 			//maybe an index operator to return a row?

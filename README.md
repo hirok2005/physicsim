@@ -1,6 +1,5 @@
 # Physicsim
-------------
 
 Basic 2D physics engine
 
-Units are in centimeters
+Units are in centimetres
