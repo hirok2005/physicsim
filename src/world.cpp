@@ -1,4 +1,6 @@
 #include "physicsim/world.hpp"
+// world is in centimetres
+
 
 physicsim::World::World(int x, int y) : X(x), Y(y) {}
 
