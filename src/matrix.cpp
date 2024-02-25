@@ -86,6 +86,12 @@ physicsim::Matrix physicsim::Matrix::scalarDivide(float lambda) const {
 	return t;
 }
 
+/*! Add matrices of equal dimensions
+ *
+ * Throws error for unequal dimensions
+ *
+ * TODO: return reference
+ */
 physicsim::Matrix physicsim::Matrix::operator+(const Matrix& other) const {
 	if (this->rows != other.rows || this->cols != other.cols) {
 		throw std::invalid_argument("both matrices must have same size");
@@ -99,6 +105,11 @@ physicsim::Matrix physicsim::Matrix::operator+(const Matrix& other) const {
 	return t;
 }
 
+
+/*! Add scalar value to all elements of matrix
+ *
+ * TODO: return reference
+ */
 physicsim::Matrix physicsim::Matrix::operator+(const float& scalar) const {
 	physicsim::Matrix t(this->rows, this->cols);
 
@@ -109,6 +120,12 @@ physicsim::Matrix physicsim::Matrix::operator+(const float& scalar) const {
 	return t;
 }
 
+/*! Subtract matrices of equal dimensions
+ *
+ * Throws error for unequal matrix dimensions
+ *
+ * TODO: return reference
+ */
 physicsim::Matrix physicsim::Matrix::operator-(const Matrix& other) const {
 	if (this->rows != other.rows || this->cols != other.cols) {
 		throw std::invalid_argument("both matrices must have same size");
@@ -122,6 +139,12 @@ physicsim::Matrix physicsim::Matrix::operator-(const Matrix& other) const {
 	return t;
 }
 
+/*! Matrix product with syntax m1 * m2
+ *
+ * Throws error upon incompatible matrix dimensions
+ *
+ * TODO: return reference
+ */
 physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 	if (this->cols != other.rows) {
 		throw std::invalid_argument("left matrix must have same number of columns as left matrix rows");
@@ -141,6 +164,12 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 	return t;
 }
 
+
+/*! Indexing a 2d matrix with syntax m(row, col)
+ * throws error for index out of range
+ *
+ * This version non const, can use to assign new value
+ */
 float& physicsim::Matrix::operator()(const int row, const int col) {
 	if(!this->indexOutOfBounds(row, col)) {
 		return this->arr[row * this->cols + col];
@@ -148,6 +177,13 @@ float& physicsim::Matrix::operator()(const int row, const int col) {
 	throw std::out_of_range("Index out of bounds"); //add more personalised error message later
 }
 
+/*! Indexing a 2d matrix with syntax m(row, col)
+ * throws error for index out of range
+ *
+ * This version is const, only for copying
+ *
+ * TODO: version for single column or single row
+ */
 const float& physicsim::Matrix::operator()(const int row, const int col) const {
 	if(!this->indexOutOfBounds(row, col)) {
 		return this->arr[row * this->cols + col];
@@ -155,10 +191,12 @@ const float& physicsim::Matrix::operator()(const int row, const int col) const {
 	throw std::out_of_range("Index out of bounds");
 }
 
+//! Getter for rows member
 int physicsim::Matrix::getRows() const {
 	return this->rows;
 }
 
+//! Getter for cols member
 int physicsim::Matrix::getCols() const {
 	return this->cols;
 }
@@ -169,6 +207,8 @@ physicsim::Matrix physicsim::Matrix::rotationMat2D(float theta)
 	return physicsim::Matrix(2, 2, { cTheta, -sTheta, sTheta, cTheta });
 }
 
+/* Return 0 if index out of bounds, return 1 if index in bounds
+ */
 int physicsim::Matrix::indexOutOfBounds(int row, int col) const {
 	if (this->cols > col && this->rows > row) {
 		return 0;
@@ -176,6 +216,10 @@ int physicsim::Matrix::indexOutOfBounds(int row, int col) const {
 	return 1;
 }
 
+/*! Print matrix in 2 for loops
+ *
+ * TODO: remove loops to lower time complexity
+ */
 void physicsim::Matrix::print() const {
 	for(int i{}; i < this->rows; i++) {
 		for(int j{}; j < this->cols; j++) {

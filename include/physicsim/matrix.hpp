@@ -18,14 +18,14 @@ namespace physicsim {
 			Matrix(int rows, int cols);
 			Matrix(int rows, int cols, std::initializer_list<float> vals); //second constructor for when you have all values, consider std::initialiser_list
 			//make copy constructors
-			void swapRows(int row1, int row2);
+			void swapRows(int row1, int row2); //return reference, change to pointers to rows
 			Matrix transpose();
 
 			Matrix scalarMultiply(float lambda) const;
 			Matrix scalarDivide(float lambda) const; //shorthand for easier usage, essentially just matrix.scalarMultiply(1/lambda)
 
 			Matrix operator+(const Matrix& other) const; //maybe some +=, +=, etc operators would be nice
-			Matrix operator+(const float& scalar) const;
+			Matrix operator+(const float& scalar) const; //all should return references
 			Matrix operator-(const Matrix& other) const;
 			Matrix operator*(const Matrix& other) const;
 			float& operator()(const int row, const int col); //only c++23 has multi parameter operator[]
