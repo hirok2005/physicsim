@@ -112,6 +112,15 @@ physicsim::Matrix(*physicsim::RigidBody::getVertices()) [4] {
 	return &this->vertices;
 }
 
+void physicsim::RigidBody::getVerticesWorld(physicsim::Matrix(&res)[4]) {
+	physicsim::Matrix rotMat = physicsim::Matrix().rotationMat2D(this->theta);
+
+	for (int i = 0; i < 4; i++) {
+		res[i] = (rotMat * this->vertices[i]) + this->pos;
+	}
+
+}
+
 physicsim::Matrix physicsim::RigidBody::getPos() const {
 	return this->pos;
 }

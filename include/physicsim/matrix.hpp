@@ -24,6 +24,7 @@ namespace physicsim {
 			Matrix scalarMultiply(float lambda) const;
 			Matrix scalarDivide(float lambda) const; //shorthand for easier usage, essentially just matrix.scalarMultiply(1/lambda)
 
+			float dot(const Matrix& other) const;
 			Matrix operator+(const Matrix& other) const; //maybe some +=, +=, etc operators would be nice
 			Matrix operator+(const float& scalar) const; //all should return references
 			Matrix operator-(const Matrix& other) const;

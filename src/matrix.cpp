@@ -86,6 +86,17 @@ physicsim::Matrix physicsim::Matrix::scalarDivide(float lambda) const {
 	return t;
 }
 
+float physicsim::Matrix::dot(const Matrix& other) const {
+	if (this->cols > 1 || this->cols != other.cols || this->rows != other.rows) {
+		throw std::invalid_argument("must be vectors of same size");
+	}
+	float res = 0;
+	for (int i = 0; i < this->rows; i++) {
+		res += this->arr[i] * other.arr[i];
+	}
+	return res;
+}
+
 /*! Add matrices of equal dimensions
  *
  * Throws error for unequal dimensions

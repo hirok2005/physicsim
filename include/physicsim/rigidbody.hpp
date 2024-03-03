@@ -43,6 +43,7 @@ namespace physicsim {
 			void addImpulse(Matrix i);
 			void update(float dt);
 			Matrix(*getVertices()) [4];
+			void getVerticesWorld(physicsim::Matrix(&res)[4]); // in world coords
 			Matrix getPos() const;
 	};
 }

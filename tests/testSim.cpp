@@ -6,8 +6,8 @@
 int main() {
 	// setup
 	physicsim::World sim(150, 100);
-	sim.addBody(new physicsim::RigidBody(50, 90, 1, 0.5, 10));
-	sim.addBody(new physicsim::RigidBody(20, 90, 5, 0, 10));
+	sim.addBody(new physicsim::RigidBody(50, 90, 1, 0.5, 10, 10));
+	sim.addBody(new physicsim::RigidBody(20, 90, 5, 0, 10, 10));
 
 	// sim.addBody(new physicsim::RigidBody(5, 5, 4, 0, 1, 1));
 	sim.bodies[1]->setLVel({ 2, 1, {10, 0} });
