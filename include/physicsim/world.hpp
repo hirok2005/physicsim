@@ -13,6 +13,10 @@ namespace physicsim {
 			World(int x, int y);
 			void addBody(RigidBody* body);
 			void step(float dt); // run at each loop
+
+			bool collisionDetect(RigidBody* body1, RigidBody* body2) const;
+			void collisionHandler(); // everything collision related in this, simply call this every loop and is handles it all
+
 	};
 }
 

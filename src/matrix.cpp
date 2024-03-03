@@ -240,6 +240,33 @@ int physicsim::Matrix::getRows() const {
 	return this->rows;
 }
 
+int physicsim::Matrix::colOutOfBounds(int col) const
+{
+	return 0;
+}
+
+float physicsim::Matrix::vectorMagnitude() const {
+	if (this->cols > 1) {
+		throw std::invalid_argument("Must be vector");
+	}
+	float res = 0;
+	for (int i = 0; i < this->rows; i++) {
+		res += this->arr[i] * this->arr[i];
+	}
+	return std::sqrt(res);
+}
+
+float physicsim::Matrix::vectorMagnitudeSqrd() const {
+	if (this->cols > 1) {
+		throw std::invalid_argument("Must be vector");
+	}
+	float res = 0;
+	for (int i = 0; i < this->rows; i++) {
+		res += this->arr[i] * this->arr[i];
+	}
+	return res;
+}
+
 //! Getter for cols member
 int physicsim::Matrix::getCols() const {
 	return this->cols;

@@ -37,6 +37,8 @@ namespace physicsim {
 			float& operator()(const int row, const int col); //only c++23 has multi parameter operator[]
 			const float& operator()(const int row, const int col) const;
 			//maybe an index operator to return a row?
+			float vectorMagnitudeSqrd() const;
+			float vectorMagnitude() const;
 
 			int getRows() const;
 			int getCols() const;

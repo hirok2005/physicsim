@@ -7,6 +7,7 @@
 #include "world.hpp"
 #include "matrix.hpp"
 #include "rigidbody.hpp"
+#include "constants.hpp"
 
 namespace physicsim {}
 

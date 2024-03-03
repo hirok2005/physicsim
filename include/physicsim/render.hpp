@@ -10,15 +10,14 @@
 
 namespace physicsim {
 
-	constexpr int SCALE = 10;
-
+	constexpr int SCALE = 10; // idk where to put, probably should be in class
 	class Renderer {
 		public:
 			World* sim;
 			int width, height;
 			std::vector<sf::Shape*> shapes;
 			bool showInfo;
-
+			sf::Vector2f sfPosition(const RigidBody& body) const;
 			Renderer(World* sim, bool showFPS);
 			void update(const float& dt);
 			sf::RenderWindow window;

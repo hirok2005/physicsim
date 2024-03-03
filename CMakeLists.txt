@@ -16,8 +16,7 @@ if(NOT SFML_FOUND)
       GIT_REPOSITORY https://github.com/SFML/SFML.git
       GIT_TAG 2.6.x
   )
-  FetchContent_Populate(SFML)
-  add_subdirectory(${SFML_SOURCE_DIR} ${SFML_BINARY_DIR})
+  FetchContent_MakeAvailable(SFML)  
 endif()
 
 # Set SFML_DIR to the directory containing SFMLConfig.cmake
@@ -32,7 +31,7 @@ add_library(physicsim
     "src/matrix.cpp"
     "src/rigidbody.cpp"
     "src/world.cpp"
-)
+ )
 
 target_include_directories(physicsim PUBLIC "${CMAKE_SOURCE_DIR}/include")
 target_link_libraries(physicsim PRIVATE sfml-graphics sfml-window)

@@ -4,19 +4,27 @@
 
 #include "physicsim/render.hpp"
 #include "physicsim/world.hpp"
-#include <iostream>
+#include "physicsim/constants.hpp"
 #include <string>
+
+sf::Vector2f physicsim::Renderer::sfPosition(const RigidBody& body) const {
+	Matrix pos = body.getPos();
+	if (body.getType() == physicsim::Rectangle) {
+		return sf::Vector2f((pos(0, 0)) * physicsim::SCALE, this->height - pos(1, 0) * physicsim::SCALE);
+	}
+	else {
+		return sf::Vector2f(pos(0, 0) * physicsim::SCALE, this->height - pos(1, 0) * physicsim::SCALE);
+	}
+}
 
 physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 	this->showInfo= showInfo;
 	this->sim = sim;
 	this->width = sim->X * physicsim::SCALE; this->height = sim->Y * physicsim::SCALE;
-	this->window.create(sf::VideoMode(this->width, this->height), "SFML Window", sf::Style::Default, sf::ContextSettings(0, 0, 8));
+	this->window.create(sf::VideoMode(this->width, this->height), "Renderer", sf::Style::Default);
 
-	// not sure about paths, this doenst work right now and its late, also maybe average it so its somewhat visible
-	if (!this->font.loadFromFile("C:/dev/cpp_dev/physicsim/arial.ttf")) {
-		std::cout << "cant find file";
-	} else {
+	// not sure about paths, this doenst work right now and its late, maybe require user to put in PATH vars, also maybe average it so its somewhat visible
+	if (this->font.loadFromFile("C:/dev/cpp_dev/physicsim/arial.ttf")) {
 		this->info.setFont(this->font);
 		this->info.setCharacterSize(20);
 		this->info.setPosition(0, this->height - 20);
@@ -30,17 +38,21 @@ physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 			this->shapes.push_back(new sf::CircleShape(body->getR() * physicsim::SCALE));
 		}
 		this->shapes.back()->setFillColor(sf::Color::White);
+		if (body->getType() == physicsim::Rectangle) {
+			this->shapes.back()->setOrigin(physicsim::SCALE * body->getW() / 2, physicsim::SCALE * body->getH() / 2);
+		}
+		else {
+			this->shapes.back()->setOrigin(physicsim::SCALE * body->getR(), physicsim::SCALE * body->getR());
+		}
 	}
 
 }
 
 void physicsim::Renderer::update(const float& dt) {
 	this->window.clear();
-	physicsim::Matrix pos;
 	for (int i = 0; i < this->shapes.size(); i++) {
-		pos = this->sim->bodies[i]->getPos();
-		this->shapes[i]->setPosition(pos(0, 0) * physicsim::SCALE, this->height - pos(1, 0) * physicsim::SCALE);
-		this->shapes[i]->setRotation(this->sim->bodies[i]->getT());
+		this->shapes[i]->setPosition(this->sfPosition(*this->sim->bodies[i]));
+		this->shapes[i]->setRotation(this->sim->bodies[i]->getT() * physicsim::RAD_TO_DEG);
 		this->window.draw(*this->shapes[i]);
 	}
 	if (this->showInfo) {

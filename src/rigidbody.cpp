@@ -3,7 +3,6 @@
 #include <stdexcept>
 
 
-
 physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, physicsim::Shape type) {
 	this->pos = physicsim::Matrix(2, 1, {x, y}); //set x and y values
 	this->m = m;
@@ -49,6 +48,7 @@ void physicsim::RigidBody::addImpulse(physicsim::Matrix i) {
 void physicsim::RigidBody::update(float dt) {
 	this->lVel += this->f.scalarDivide(this->m).scalarMultiply(dt);
 	this->pos += this->lVel.scalarMultiply(dt);
+	this->f = physicsim::Matrix(2, 1, { 0, 0 });
 }
 
 float physicsim::RigidBody::getH() const {
