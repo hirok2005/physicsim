@@ -7,6 +7,9 @@
 #include "physicsim/constants.hpp"
 #include <string>
 
+/*! Converts position of body in physicsim::vector to sf::Vector2f
+ *  Uses physicsim::SCALE as scaling factor
+ */
 sf::Vector2f physicsim::Renderer::sfPosition(const RigidBody& body) const {
 	Matrix pos = body.getPos();
 	if (body.getType() == physicsim::Rectangle) {
@@ -17,6 +20,12 @@ sf::Vector2f physicsim::Renderer::sfPosition(const RigidBody& body) const {
 	}
 }
 
+/*! Constructor for renderer
+ *
+ * Takes a world, which is our virtual representation of a simulation manager
+ * Convert all world dimensions to the dimensions for rendering
+ * Flag showInfo for diagnostics
+ */
 physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 	this->showInfo= showInfo;
 	this->sim = sim;
@@ -48,6 +57,10 @@ physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 
 }
 
+/*! Redraws the shapes on the screen with new scaled position
+ *  Called every render cycle
+ *  Can show time delta from processing
+ */
 void physicsim::Renderer::update(const float& dt) {
 	this->window.clear();
 	for (int i = 0; i < this->shapes.size(); i++) {

@@ -2,7 +2,8 @@
 #include "physicsim/matrix.hpp"
 #include <stdexcept>
 
-
+/*! Constructs a rigidobody with given position, mass, angle from horizontal and shape
+ */
 physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, physicsim::Shape type) {
 	this->pos = physicsim::Matrix(2, 1, {x, y}); //set x and y values
 	this->m = m;
@@ -12,6 +13,8 @@ physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, physicsi
 	this->type = type;
 }
 
+/*! Constructs a rectangle rigidbody with given position, mass, angle from horizontal and dimensions
+ */
 physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float w, float h) : vertices{ physicsim::Matrix(2, 1, {-w / 2, h / 2}), physicsim::Matrix(2, 1, { w / 2, h / 2 }), physicsim::Matrix(2, 1, { w / 2, -h / 2 }), physicsim::Matrix(2, 1, { -w / 2, -h / 2 }) } {
 	this->pos = physicsim::Matrix(2, 1, { x, y }); //set x and y values
 	this->m = m;
@@ -25,6 +28,8 @@ physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float w,
 	this->type = physicsim::Rectangle;
 }
 
+/*! Construct a circle rigidbody with position, mass, angle and radius
+*/
 physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float r) {
 	this->pos = physicsim::Matrix(2, 1, { x, y }); //set x and y values
 	this->m = m;
@@ -37,18 +42,23 @@ physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float r)
 	this->type = physicsim::Circle;
 
 }
+
 physicsim::Shape physicsim::RigidBody::getType() const {
 	return this->type;
 }
 
+/*! Changes velocity based on given impulse
+ */
 void physicsim::RigidBody::addImpulse(physicsim::Matrix i) {
 	this->lVel = this->lVel + i.scalarDivide(this->m); //divide impulse by mass
 }
 
+/*! Applies uniform acceleration for each timestep, updates position and resets force
+ */
 void physicsim::RigidBody::update(float dt) {
 	this->lVel += this->f.scalarDivide(this->m).scalarMultiply(dt);
 	this->pos += this->lVel.scalarMultiply(dt);
-	this->f = physicsim::Matrix(2, 1, { 0, 0 });
+	this->f = physicsim::Matrix(2, 1, { 0, 0 }); //add a time applied to force
 }
 
 float physicsim::RigidBody::getH() const {

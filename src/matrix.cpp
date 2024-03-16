@@ -60,6 +60,10 @@ void physicsim::Matrix::swapRows(int row1, int row2) {
 
 }
 
+/*! Transpose the matrix
+ *
+ * TODO: testing
+ */
 physicsim::Matrix physicsim::Matrix::transpose() {
 	physicsim::Matrix t(this->cols, this->rows);
 	for (int i = 0; i < this->rows; i++) {
@@ -70,6 +74,10 @@ physicsim::Matrix physicsim::Matrix::transpose() {
 	return t;
 }
 
+/*! Multiply matrix by scalar
+ *
+ * TODO: testing
+ */
 physicsim::Matrix physicsim::Matrix::scalarMultiply(float lambda) const {
 	physicsim::Matrix t(this->rows, this->cols);
 	for (int i = 0; i < this->rows * this->cols; i++) {
@@ -78,6 +86,9 @@ physicsim::Matrix physicsim::Matrix::scalarMultiply(float lambda) const {
 	return t;
 }
 
+/*! Divide matrix by scalar
+ * TODO: testing
+ */
 physicsim::Matrix physicsim::Matrix::scalarDivide(float lambda) const {
 	physicsim::Matrix t(this->rows, this->cols);
 	for (int i = 0; i < this->rows * this->cols; i++) {
@@ -86,6 +97,10 @@ physicsim::Matrix physicsim::Matrix::scalarDivide(float lambda) const {
 	return t;
 }
 
+/*! Dot product of 2 matrices. Errors when matrices not same size. 
+ *
+ * TODO: require that matrices are vectors
+ */
 float physicsim::Matrix::dot(const Matrix& other) const {
 	if (this->cols > 1 || this->cols != other.cols || this->rows != other.rows) {
 		throw std::invalid_argument("must be vectors of same size");
@@ -100,8 +115,6 @@ float physicsim::Matrix::dot(const Matrix& other) const {
 /*! Add matrices of equal dimensions
  *
  * Throws error for unequal dimensions
- *
- * TODO: return reference
  */
 physicsim::Matrix physicsim::Matrix::operator+(const Matrix& other) const {
 	if (this->rows != other.rows || this->cols != other.cols) {
@@ -134,8 +147,6 @@ physicsim::Matrix physicsim::Matrix::operator+(const float& scalar) const {
 /*! Subtract matrices of equal dimensions
  *
  * Throws error for unequal matrix dimensions
- *
- * TODO: return reference
  */
 physicsim::Matrix physicsim::Matrix::operator-(const Matrix& other) const {
 	if (this->rows != other.rows || this->cols != other.cols) {
@@ -150,6 +161,10 @@ physicsim::Matrix physicsim::Matrix::operator-(const Matrix& other) const {
 	return t;
 }
 
+/*! Subtract scalar from all elements of matrix
+ *
+ * TODO: testing
+ */
 physicsim::Matrix physicsim::Matrix::operator-(const float& scalar) const {
 	physicsim::Matrix t(this->rows, this->cols);
 
@@ -160,8 +175,9 @@ physicsim::Matrix physicsim::Matrix::operator-(const float& scalar) const {
 	return t;
 }
 
-
-void physicsim::Matrix::operator+=(const Matrix& other) {
+/*! Reassigns matrix adding with other matrix
+ */
+physicsim::Matrix& physicsim::Matrix::operator+=(const Matrix& other) {
 	if (this->rows != other.rows || this->cols != other.cols) {
 		throw std::invalid_argument("both matrices must have same size");
 	}
@@ -171,13 +187,17 @@ void physicsim::Matrix::operator+=(const Matrix& other) {
 	}
 }
 
-void physicsim::Matrix::operator+=(const float& scalar) {
+/*! Reassigns matrix with added scalar
+ */
+physicsim::Matrix& physicsim::Matrix::operator+=(const float& scalar) {
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		this->arr[i] += scalar;
 	}
 }
 
-void physicsim::Matrix::operator-=(const Matrix& other) {
+/*! Reassigns matrix with subtracted other matrix
+ */
+physicsim::Matrix& physicsim::Matrix::operator-=(const Matrix& other) {
 	if (this->rows != other.rows || this->cols != other.cols) {
 		throw std::invalid_argument("both matrices must have same size");
 	}
@@ -187,12 +207,16 @@ void physicsim::Matrix::operator-=(const Matrix& other) {
 	}
 }
 
-void physicsim::Matrix::operator-=(const float& scalar) {
+/*! Reassigns matrix with subtracted scalar
+ */
+physicsim::Matrix& physicsim::Matrix::operator-=(const float& scalar) {
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		this->arr[i] -= scalar;
 	}
 }
 
+/*! Matrix multiplication operator
+ */
 physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 	if (this->cols != other.rows) {
 		throw std::invalid_argument("left matrix must have same number of columns as left matrix rows");
@@ -219,7 +243,7 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
  *
  * move to correct function
  */
-void physicsim::Matrix::operator=(const physicsim::Matrix& other) {
+physicsim::Matrix& physicsim::Matrix::operator=(const physicsim::Matrix& other) {
 	this->rows = other.getRows(); this->cols = other.getCols();
 	this->arr = new float[this->rows * this->cols];
 	std::copy(other.arr, other.arr + this->rows * this->cols, arr);
@@ -251,13 +275,20 @@ int physicsim::Matrix::getRows() const {
 	return this->rows;
 }
 
+/*! Returns 1 if the given column is greater than what can be indexed
+ */
 int physicsim::Matrix::colOutOfBounds(int col) const
 {
+	if(this->cols <= col || col < 0) {
+		return 1;
+	}
 	return 0;
 }
 
+/*! Calculates vector magnitude using pythagoras theorem
+ */
 float physicsim::Matrix::vectorMagnitude() const {
-	if (this->cols > 1) {
+	if (this->colOutOfBounds(1)) {
 		throw std::invalid_argument("Must be vector");
 	}
 	float res = 0;
@@ -267,8 +298,10 @@ float physicsim::Matrix::vectorMagnitude() const {
 	return std::sqrt(res);
 }
 
+/*! Calculates vector magnitude squared
+ */
 float physicsim::Matrix::vectorMagnitudeSqrd() const {
-	if (this->cols > 1) {
+	if (this->colOutOfBounds(1)) {
 		throw std::invalid_argument("Must be vector");
 	}
 	float res = 0;
@@ -283,6 +316,8 @@ int physicsim::Matrix::getCols() const {
 	return this->cols;
 }
 
+/*! Rotates matrix by theta radians
+ */
 physicsim::Matrix physicsim::Matrix::rotationMat2D(float theta)
 {
 	float cTheta = std::cos(theta); float sTheta = std::sin(theta);

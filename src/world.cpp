@@ -2,13 +2,18 @@
 #include <iostream>
 // world is in centimetres
 
-
+/*! Constructs world with dimensions x, y
+ */
 physicsim::World::World(int x, int y) : X(x), Y(y) {}
 
+/*! Adds a rigidbody to world. This lets world manage the body
+ */
 void physicsim::World::addBody(RigidBody* body) {
 	this->bodies.push_back(body);
 }
 
+/*! Function to update all bodies in the world. Runs with the given delta time for all suvatesque equations
+ */
 void physicsim::World::step(float dt) {
 	for (int i = 0; i < this->bodies.size(); i++) {
 		this->bodies[i]->update(dt);
@@ -16,6 +21,10 @@ void physicsim::World::step(float dt) {
 }
 
 // todo broad phase detection
+/*! Returns 1 when objects overlap the same coordinates in space. Currently works with only 2 bodies
+ *
+ * TODO: collision detection for multiple shapes, and homogenous interface
+ */
 bool physicsim::World::collisionDetect(RigidBody* body1, RigidBody* body2) const{
 	if (body1->getType() == physicsim::Circle && body2->getType() == physicsim::Circle) {
 		return this->circleCircleCollisionDetect(body1, body2);
@@ -26,15 +35,20 @@ bool physicsim::World::collisionDetect(RigidBody* body1, RigidBody* body2) const
 }
 
 // todo param validation on these
-
+/*! Collision detection for circles
+ */
 bool physicsim::World::circleCircleCollisionDetect(RigidBody* circle1, RigidBody* circle2) const {
 	return std::pow(circle1->getR() + circle2->getR(), 2) > (circle1->getPos() - circle2->getPos()).vectorMagnitudeSqrd();
 }
 
+/*! Collision detection for circle + rectangle
+ */
 bool physicsim::World::rectCircleCollisionDetect(RigidBody* rect, RigidBody* circle) const {
 	return false;
 }
 
+/*! Collision detection for rectangles
+ */
 bool physicsim::World::rectRectCollisionDetect(RigidBody* rect1, RigidBody* rect2) const {
 	// SAT using body1s edges first
 	// get points, convert to world coords, find normal of edge
