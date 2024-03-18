@@ -6,9 +6,11 @@
 int main() {
 	// setup
 	physicsim::World sim(150, 100);
+	std::cout << "0" << std::endl;
 	sim.addBody(new physicsim::RigidBody(50, 90, 1, 0.5, 10, 10));
+	std::cout << "1" << std::endl;
 	sim.addBody(new physicsim::RigidBody(20, 90, 5, 0, 10, 10));
-
+	std::cout << "2" << std::endl;
 	// sim.addBody(new physicsim::RigidBody(5, 5, 4, 0, 1, 1));
 	sim.bodies[1]->setLVel({ 2, 1, {10, 0} });
 	sim.bodies[0]->setLVel({ 2, 1, {5, 0} });
@@ -39,6 +41,7 @@ int main() {
 		ren.update(dt);
 		auto endTime = std::chrono::high_resolution_clock::now();
 		dt = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime).count();
+		//sim.collisionHandler(dt);
 		std::cout << sim.collisionDetect(sim.bodies[0], sim.bodies[1]) << "\n";
 	}
 

@@ -318,9 +318,11 @@ int physicsim::Matrix::getCols() const {
 
 /*! Rotates matrix by theta radians
  */
-physicsim::Matrix physicsim::Matrix::rotationMat2D(float theta)
+physicsim::Matrix physicsim::rotationMat2D(float theta)
 {
+	std::cout << "1" << std::endl;
 	float cTheta = std::cos(theta); float sTheta = std::sin(theta);
+	std::cout << "2" << std::endl;
 	return physicsim::Matrix(2, 2, { cTheta, -sTheta, sTheta, cTheta });
 }
 

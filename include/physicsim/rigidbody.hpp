@@ -40,8 +40,10 @@ namespace physicsim {
 			void addF(const Matrix& f);
 			void addPos(const Matrix& pos);
 			void addTheta(const float& theta);
-			void addImpulse(Matrix i);
+			void addImpulse(Matrix i, float dt);
 			void update(float dt);
+
+			Matrix getMomentum();
 			Matrix(*getVertices()) [4];
 			void getVerticesWorld(physicsim::Matrix(&res)[4]); // in world coords
 			Matrix getPos() const;

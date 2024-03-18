@@ -15,7 +15,7 @@ namespace physicsim {
 			void step(float dt); // run at each loop
 
 			bool collisionDetect(RigidBody* body1, RigidBody* body2) const;
-			void collisionHandler(); // everything collision related in this, simply call this every loop and is handles it all
+			void collisionHandler(float dt); // everything collision related in this, simply call this every loop and is handles it all
 			bool circleCircleCollisionDetect(RigidBody* circle1, RigidBody* circle2) const;
 			bool rectCircleCollisionDetect(RigidBody* rect, RigidBody* circle) const;
 			bool rectRectCollisionDetect(RigidBody* rect1, RigidBody* rect2) const;

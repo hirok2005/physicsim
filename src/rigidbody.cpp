@@ -49,8 +49,12 @@ physicsim::Shape physicsim::RigidBody::getType() const {
 
 /*! Changes velocity based on given impulse
  */
-void physicsim::RigidBody::addImpulse(physicsim::Matrix i) {
-	this->lVel = this->lVel + i.scalarDivide(this->m); //divide impulse by mass
+void physicsim::RigidBody::addImpulse(physicsim::Matrix i, float dt) {
+	this->f = i.scalarDivide(dt); //Impulse to force. Update will take care of applying the force. Not as efficient as directly turning impulse to velocity
+}
+
+physicsim::Matrix physicsim::RigidBody::getMomentum() {
+	return this->lVel.scalarMultiply(this->m);
 }
 
 /*! Applies uniform acceleration for each timestep, updates position and resets force
@@ -123,7 +127,7 @@ physicsim::Matrix(*physicsim::RigidBody::getVertices()) [4] {
 }
 
 void physicsim::RigidBody::getVerticesWorld(physicsim::Matrix(&res)[4]) {
-	physicsim::Matrix rotMat = physicsim::Matrix().rotationMat2D(this->theta);
+	physicsim::Matrix rotMat = physicsim::rotationMat2D(this->theta);
 
 	for (int i = 0; i < 4; i++) {
 		res[i] = (rotMat * this->vertices[i]) + this->pos;

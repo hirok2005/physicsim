@@ -10,6 +10,7 @@ physicsim::World::World(int x, int y) : X(x), Y(y) {}
  */
 void physicsim::World::addBody(RigidBody* body) {
 	this->bodies.push_back(body);
+	std::cout << "f" << std::endl;
 }
 
 /*! Function to update all bodies in the world. Runs with the given delta time for all suvatesque equations
@@ -32,6 +33,7 @@ bool physicsim::World::collisionDetect(RigidBody* body1, RigidBody* body2) const
 	if (body1->getType() == physicsim::Rectangle && body2->getType() == physicsim::Rectangle) {
 		return rectRectCollisionDetect(body1, body2);
 	}
+	return 0;
 }
 
 // todo param validation on these
@@ -77,6 +79,23 @@ bool physicsim::World::rectRectCollisionDetect(RigidBody* rect1, RigidBody* rect
 
 
 	return true;
+}
+
+/*! Iterate over all pairs of bodies and alter motion between each pair of bodies
+ *
+ * TODO: implement getMomentum() for rigidbody
+ */
+void physicsim::World::collisionHandler(float dt) {
+	bool collision = this->collisionDetect(this->bodies[0], this->bodies[1]);
+	if(collision) {
+		//add impulse to each body, according to momentum and energy balance
+		//impulse is force times time, and also change in momentum
+		//addImpulse will turn impulse vector into force
+		physicsim::Matrix i = this->bodies[1]->getMomentum() - this->bodies[0]->getMomentum();
+		//TODO: getMomentum function for bodies
+		this->bodies[0]->addImpulse(i, dt);
+		this->bodies[1]->addImpulse((i - i) - i, dt); //bad way to write negative of i
+	}
 }
 
 

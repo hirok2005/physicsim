@@ -44,9 +44,7 @@ int main() {
 
 	t.print();
 
-	t = t.transpose();
-	
-	printMatrix(t);
+	t.transpose().print();
 
 	// ChatGPT generated
 	physicsim::Matrix m1(2, 3);
@@ -64,11 +62,11 @@ int main() {
 	// 58, 64
 	// 139, 154
 
-	printMatrix(result);
+	result.print();
 
-	physicsim::Matrix rot = physicsim::Matrix::rotationMat2D(3.14159 / 2);
+	physicsim::Matrix rot = physicsim::rotationMat2D(3.14159 / 2);
 
-	printMatrix(rot);
+	rot.print();
 
 	physicsim::Matrix b(3, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
 

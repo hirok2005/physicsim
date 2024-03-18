@@ -43,7 +43,6 @@ namespace physicsim {
 
 			int getRows() const;
 			int getCols() const;
-			static Matrix rotationMat2D(float theta);
 
 			int rowOutOfBounds(int row) const;
 			int colOutOfBounds(int col) const;
@@ -53,6 +52,10 @@ namespace physicsim {
 
 			~Matrix() = default;
 	};
+
+	Matrix rotationMat2D(float theta);
 }
+
+
 
 #endif // PHYSICSIM_MATRIX_HPP
