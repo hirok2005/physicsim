@@ -185,6 +185,7 @@ physicsim::Matrix& physicsim::Matrix::operator+=(const Matrix& other) {
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		this->arr[i] += other.arr[i];
 	}
+	return *this;
 }
 
 /*! Reassigns matrix with added scalar
@@ -193,6 +194,7 @@ physicsim::Matrix& physicsim::Matrix::operator+=(const float& scalar) {
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		this->arr[i] += scalar;
 	}
+	return *this;
 }
 
 /*! Reassigns matrix with subtracted other matrix
@@ -205,6 +207,7 @@ physicsim::Matrix& physicsim::Matrix::operator-=(const Matrix& other) {
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		this->arr[i] -= other.arr[i];
 	}
+	return *this;
 }
 
 /*! Reassigns matrix with subtracted scalar
@@ -213,6 +216,7 @@ physicsim::Matrix& physicsim::Matrix::operator-=(const float& scalar) {
 	for (int i = 0; i < this->rows * this->cols; i++) {
 		this->arr[i] -= scalar;
 	}
+	return *this;
 }
 
 /*! Matrix multiplication operator
@@ -247,6 +251,7 @@ physicsim::Matrix& physicsim::Matrix::operator=(const physicsim::Matrix& other) 
 	this->rows = other.getRows(); this->cols = other.getCols();
 	this->arr = new float[this->rows * this->cols];
 	std::copy(other.arr, other.arr + this->rows * this->cols, arr);
+	return *this;
 }
 
 float& physicsim::Matrix::operator()(const int row, const int col) {
@@ -279,7 +284,7 @@ int physicsim::Matrix::getRows() const {
  */
 int physicsim::Matrix::colOutOfBounds(int col) const
 {
-	if(this->cols <= col || col < 0) {
+	if(this->cols > col || col < 0) {
 		return 1;
 	}
 	return 0;
@@ -320,9 +325,7 @@ int physicsim::Matrix::getCols() const {
  */
 physicsim::Matrix physicsim::rotationMat2D(float theta)
 {
-	std::cout << "1" << std::endl;
 	float cTheta = std::cos(theta); float sTheta = std::sin(theta);
-	std::cout << "2" << std::endl;
 	return physicsim::Matrix(2, 2, { cTheta, -sTheta, sTheta, cTheta });
 }
 

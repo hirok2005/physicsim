@@ -1,4 +1,5 @@
 #include "physicsim/world.hpp"
+#include "physicsim/constants.hpp"
 #include <iostream>
 // world is in centimetres
 
@@ -31,7 +32,13 @@ bool physicsim::World::collisionDetect(RigidBody* body1, RigidBody* body2) const
 		return this->circleCircleCollisionDetect(body1, body2);
 	}
 	if (body1->getType() == physicsim::Rectangle && body2->getType() == physicsim::Rectangle) {
-		return rectRectCollisionDetect(body1, body2);
+		return this->rectRectCollisionDetect(body1, body2);
+	}
+	if (body1->getType() == physicsim::Rectangle && body2->getType() == physicsim::Circle) {
+		return this->rectCircleCollisionDetect(body1, body2);
+	}
+	if (body1->getType() == physicsim::Circle&& body2->getType() == physicsim::Rectangle) {
+		return this->rectCircleCollisionDetect(body2, body1);
 	}
 	return 0;
 }
@@ -44,10 +51,35 @@ bool physicsim::World::circleCircleCollisionDetect(RigidBody* circle1, RigidBody
 }
 
 /*! Collision detection for circle + rectangle
+	this isnt that optimal i think
+	shouls come back and optimise later
+	issue: when close but not intersecting it says it is
  */
 bool physicsim::World::rectCircleCollisionDetect(RigidBody* rect, RigidBody* circle) const {
-	return false;
+	physicsim::Matrix localCirclePos = physicsim::rotationMat2D(2 * physicsim::PI - rect->getT()) * (circle->getPos() - rect->getPos());
+	localCirclePos(0, 0) = std::abs(localCirclePos(0, 0));
+	localCirclePos(1, 0) = std::abs(localCirclePos(1, 0));
+
+	if (localCirclePos(0, 0) > (rect->getW() / 2 + circle->getR())) {
+		return false;
+	}
+	if (localCirclePos(1, 0) > (rect->getH() / 2 + circle->getR())) {
+		return false;
+	}
+
+	if (localCirclePos(0, 0) <= (rect->getW() / 2)) {
+		return true;
+	}
+	if (localCirclePos(1, 0) <= (rect->getH() / 2)) {
+		return true;
+	}
+
+	float cornerDist = std::pow(localCirclePos(0, 0) - rect->getW() / 2, 2) +
+		std::pow(localCirclePos(1, 0) - rect->getH() / 2, 2);
+
+	return (cornerDist <= std::pow(circle->getR(), 2));
 }
+
 
 /*! Collision detection for rectangles
  */
