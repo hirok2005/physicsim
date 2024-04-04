@@ -37,7 +37,7 @@ int main() {
 		auto endTime = std::chrono::high_resolution_clock::now();
 		dt = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime).count();
 		//sim.collisionHandler(dt);
-		std::cout << sim.collisionDetect(sim.bodies[0], sim.bodies[1]) << "\n";
+		std::cout << physicsim::Collisions::collisionDetect(sim.bodies[0], sim.bodies[1]) << "\n";
 	}
 
 	return 0;

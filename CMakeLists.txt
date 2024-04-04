@@ -31,7 +31,7 @@ add_library(physicsim
     "src/matrix.cpp"
     "src/rigidbody.cpp"
     "src/world.cpp"
- )
+  "src/collisions.cpp")
 
 target_include_directories(physicsim PUBLIC "${CMAKE_SOURCE_DIR}/include")
 target_link_libraries(physicsim PRIVATE sfml-graphics sfml-window)
