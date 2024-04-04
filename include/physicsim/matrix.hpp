@@ -20,10 +20,8 @@ namespace physicsim {
 			//make copy constructors
 			void swapRows(int row1, int row2); //return reference, change to pointers to rows
 			Matrix transpose();
-
 			Matrix scalarMultiply(float lambda) const;
 			Matrix scalarDivide(float lambda) const; //shorthand for easier usage, essentially just matrix.scalarMultiply(1/lambda)
-
 			float dot(const Matrix& other) const;
 			Matrix operator+(const Matrix& other) const; //maybe some +=, +=, etc operators would be nice
 			Matrix operator+(const float& scalar) const; //all should return references
@@ -40,6 +38,7 @@ namespace physicsim {
 			//maybe an index operator to return a row?
 			float vectorMagnitudeSqrd() const;
 			float vectorMagnitude() const;
+			Matrix normalise() const;
 
 			int getRows() const;
 			int getCols() const;
@@ -47,7 +46,6 @@ namespace physicsim {
 			int rowOutOfBounds(int row) const;
 			int colOutOfBounds(int col) const;
 			int indexOutOfBounds(int row, int col) const; //private method
-			
 			void print() const;
 
 			~Matrix() = default;

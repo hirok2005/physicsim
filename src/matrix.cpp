@@ -316,6 +316,16 @@ float physicsim::Matrix::vectorMagnitudeSqrd() const {
 	return res;
 }
 
+physicsim::Matrix physicsim::Matrix::normalise() const {
+	if (this->colOutOfBounds(1)) {
+		throw std::invalid_argument("Must be vector");
+	}
+	Matrix t = *this;
+	float distanceInv = 1 / this->vectorMagnitude();
+	t.scalarMultiply(distanceInv);
+	return t;
+}
+
 //! Getter for cols member
 int physicsim::Matrix::getCols() const {
 	return this->cols;
@@ -350,6 +360,7 @@ void physicsim::Matrix::print() const {
 		std::cout << std::endl;
 	}
 }
+
 
 /*physicsim::Matrix::~Matrix() {
 	if (arr != nullptr) {

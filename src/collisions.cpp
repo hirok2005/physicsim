@@ -1,13 +1,17 @@
 #include "physicsim/collisions.hpp"
-#include "physicsim/rigidbody.hpp"
 #include "physicsim/constants.hpp"
+
+/*
+*  Structure to store information for a given collision, allows a simple interface for resolving functions
+*/
+struct physicsim::Collisions::Manifold;
 
 // todo broad phase detection
 /*! Returns 1 when objects overlap the same coordinates in space. Currently works with only 2 bodies
  *
  * TODO: collision detection for multiple shapes, and homogenous interface
  */
-bool physicsim::Collisions::collisionDetect(RigidBody* body1, RigidBody* body2){
+bool physicsim::Collisions::collisionDetect(physicsim::RigidBody* body1, physicsim::RigidBody* body2){
 	if (body1->getType() == physicsim::Circle && body2->getType() == physicsim::Circle) {
 		return physicsim::Collisions::circleCircleCollisionDetect(body1, body2);
 	}
@@ -26,7 +30,7 @@ bool physicsim::Collisions::collisionDetect(RigidBody* body1, RigidBody* body2){
 // todo param validation on these
 /*! Collision detection for circles
  */
-bool physicsim::Collisions::circleCircleCollisionDetect(RigidBody* circle1, RigidBody* circle2) {
+bool physicsim::Collisions::circleCircleCollisionDetect(physicsim::RigidBody* circle1, physicsim::RigidBody* circle2) {
 	return std::pow(circle1->getR() + circle2->getR(), 2) > (circle1->getPos() - circle2->getPos()).vectorMagnitudeSqrd();
 }
 
@@ -35,7 +39,7 @@ bool physicsim::Collisions::circleCircleCollisionDetect(RigidBody* circle1, Rigi
 	shouls come back and optimise later
 	issue: when close but not intersecting it says it is
  */
-bool physicsim::Collisions::rectCircleCollisionDetect(RigidBody* rect, RigidBody* circle) {
+bool physicsim::Collisions::rectCircleCollisionDetect(physicsim::RigidBody* rect, physicsim::RigidBody* circle) {
 	physicsim::Matrix localCirclePos = physicsim::rotationMat2D(2 * physicsim::PI - rect->getT()) * (circle->getPos() - rect->getPos());
 	localCirclePos(0, 0) = std::abs(localCirclePos(0, 0));
 	localCirclePos(1, 0) = std::abs(localCirclePos(1, 0));
@@ -63,7 +67,7 @@ bool physicsim::Collisions::rectCircleCollisionDetect(RigidBody* rect, RigidBody
 
 /*! Collision detection for rectangles
  */
-bool physicsim::Collisions::rectRectCollisionDetect(RigidBody* rect1, RigidBody* rect2) {
+bool physicsim::Collisions::rectRectCollisionDetect(physicsim::RigidBody* rect1, physicsim::RigidBody* rect2) {
 	// SAT using body1s edges first
 	// get points, convert to Collisions coords, find normal of edge
 	// not sure if we have to do it for both rects
@@ -93,10 +97,38 @@ bool physicsim::Collisions::rectRectCollisionDetect(RigidBody* rect1, RigidBody*
 	return true;
 }
 
-/*! Iterate over all pairs of bodies and alter motion between each pair of bodies
+
+void physicsim::Collisions::push(physicsim::RigidBody* body1, physicsim::RigidBody* body2, const float depth, const Matrix& normal) {
+	body1->addPos(normal.scalarMultiply( -1 * depth / 2));
+	body2->addPos(normal.scalarMultiply(depth / 2));
+}
+
+/* Takes in 2 bodies, checks if there is a collision, if there is one, it is resolved
  *
  * TODO: implement getMomentum() for rigidbody
  */
-void physicsim::Collisions::collisionHandler(float dt) {
+void physicsim::Collisions::collisionHandler(RigidBody* body1, RigidBody* body2, float dt) {
+	bool collision = physicsim::Collisions::collisionDetect(body1, body2);
+	if (!collision) {
+		return;
+	}
+	// push bodies apart create manifold and resolve
+;
+	physicsim::Collisions::Manifold manifold;
+	if (body1->getType() == physicsim::Circle && body1->getType() == physicsim::Circle) {
+		Matrix norm = body2->getPos() - body1->getPos();
+		float dist = norm.vectorMagnitude(); // manually do it to not do redundant stuff
+		norm = norm.scalarMultiply(1 / dist);
+		float depth = dist - (body1->getR() + body2->getR());
+		Matrix point = body1->getPos() + norm.scalarMultiply(body1->getR());
+		manifold.depth = depth;
+		manifold.normal = norm;
+		manifold.point = point;
+	}
+
+
+
 
 }
+
+

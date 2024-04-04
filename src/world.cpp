@@ -9,7 +9,7 @@ physicsim::World::World(int x, int y) : X(x), Y(y) {}
 
 /*! Adds a rigidbody to world. This lets world manage the body
  */
-void physicsim::World::addBody(RigidBody* body) {
+void physicsim::World::addBody(physicsim::RigidBody* body) {
 	this->bodies.push_back(body);
 	std::cout << "f" << std::endl;
 }
