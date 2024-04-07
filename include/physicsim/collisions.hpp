@@ -18,11 +18,8 @@ namespace physicsim {
 		bool rectCircleCollisionDetect(RigidBody* rect, RigidBody* circle);
 		bool rectRectCollisionDetect(RigidBody* rect1, RigidBody* rect2);
 		void push(RigidBody* body1, RigidBody* body2, const float depth, const Matrix& normal);
-		void push(RigidBody* body1, RigidBody* body2, const float depth) {
-			void collisionHandler(RigidBody * body1, RigidBody * body2, float dt);
-			void getContactPoint(Manifold * collision, RigidBody * body1, RigidBody * body2);
-		}
-
+		void collisionHandler(RigidBody * body1, RigidBody * body2, float dt);
+		void getContactPoint(Manifold * collision, RigidBody * body1, RigidBody * body2);
 	}
 }
 
