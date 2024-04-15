@@ -1,5 +1,6 @@
 #include "physicsim/world.hpp"
 #include "physicsim/constants.hpp"
+#include "physicsim/collisions.hpp"
 #include <iostream>
 // world is in centimetres
 
@@ -20,4 +21,11 @@ void physicsim::World::step(float dt) {
 	for (int i = 0; i < this->bodies.size(); i++) {
 		this->bodies[i]->update(dt);
 	}
+
+	for (int i = 0; i < this->bodies.size(); i++) {
+		for (int j = i + 1; j < this->bodies.size(); j++) {
+			physicsim::Collisions::collisionHandler(this->bodies[i], this->bodies[j], dt);
+		}
+	}
+
 }

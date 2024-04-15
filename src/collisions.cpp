@@ -27,6 +27,7 @@ bool physicsim::Collisions::collisionDetect(physicsim::RigidBody* body1, physics
 	return 0;
 }
 
+
 // todo param validation on these
 /*! Collision detection for circles
  */
@@ -76,7 +77,6 @@ bool physicsim::Collisions::rectRectCollisionDetect(physicsim::RigidBody* rect1,
 	physicsim::Matrix CollisionsVertsB2[4];
 	rect2->getVerticesWorld(CollisionsVertsB2);
 
-
 	physicsim::Matrix edge;
 	physicsim::Matrix norm;
 	for (int i = 0; i < 4; i++) {
@@ -93,14 +93,13 @@ bool physicsim::Collisions::rectRectCollisionDetect(physicsim::RigidBody* rect1,
 		}
 	}
 
-
 	return true;
 }
 
-
-void physicsim::Collisions::push(physicsim::RigidBody* body1, physicsim::RigidBody* body2, const float depth, const Matrix& normal) {
-	body1->addPos(normal.scalarMultiply( -1 * depth / 2));
-	body2->addPos(normal.scalarMultiply(depth / 2));
+void physicsim::Collisions::positionalCorrection(physicsim::RigidBody* body1, physicsim::RigidBody* body2, const physicsim::Collisions::Manifold& manifold) {
+	physicsim::Matrix correction = manifold.normal.scalarMultiply((0.5 * manifold.depth) / (body1->getInvM() + body2->getInvM()));
+	body1->addPos(correction.scalarMultiply(body1->getInvM()));
+	body2->addPos(correction.scalarMultiply(-body2->getInvM()));
 }
 
 /* Takes in 2 bodies, checks if there is a collision, if there is one, it is resolved
@@ -113,22 +112,43 @@ void physicsim::Collisions::collisionHandler(RigidBody* body1, RigidBody* body2,
 		return;
 	}
 	// push bodies apart create manifold and resolve
-;
+
 	physicsim::Collisions::Manifold manifold;
 	if (body1->getType() == physicsim::Circle && body1->getType() == physicsim::Circle) {
 		Matrix norm = body2->getPos() - body1->getPos();
+
 		float dist = norm.vectorMagnitude(); // manually do it to not do redundant stuff
 		norm = norm.scalarMultiply(1 / dist);
+		
+		if (norm.dot(body2->getLVel() - body1->getLVel()) > 0) {
+			return;
+		}
+
 		float depth = dist - (body1->getR() + body2->getR());
 		Matrix point = body1->getPos() + norm.scalarMultiply(body1->getR());
+
 		manifold.depth = depth;
 		manifold.normal = norm;
 		manifold.point = point;
 	}
 
-
-
-
+	physicsim::Collisions::resolve(body1, body2, manifold);
+	physicsim::Collisions::positionalCorrection(body1, body2, manifold);
 }
 
+// https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/previousinformation/physics6collisionresponse/2017%20Tutorial%206%20-%20Collision%20Response.pdf
+void physicsim::Collisions::resolve(RigidBody* body1, RigidBody* body2, const Manifold& manifold) {
+	float J = -(1+std::min(body1->getE(), body2->getE())) * (body2->getLVel() - body1->getLVel()).dot(manifold.normal);
+	float divisor = manifold.normal.vectorMagnitudeSqrd() * (body1->getInvM() + body2->getInvM());
 
+	// pretty jank right now, when I implement the other types will be more concise
+	if (body1->getType() == physicsim::Circle && body1->getType() == physicsim::Circle) {
+		// divisor += body1->getI() * std::pow(body1->getR(), 2) + body2->getI() * std::pow(body2->getR(), 2);
+		J /= divisor;
+
+		body1->addLVel(manifold.normal.scalarMultiply(-J * body1->getInvM()));
+		body2->addLVel(manifold.normal.scalarMultiply(J * body2->getInvM()));
+		// body1->addAVel(body1->getR() * J * body1->getI());
+		// body2->addAVel(body2->getR() * J * body2->getI());
+	}
+}

@@ -6,6 +6,7 @@
 #include "physicsim/world.hpp"
 #include "physicsim/constants.hpp"
 #include <string>
+#include <stdlib.h>
 
 /*! Converts position of body in physicsim::vector to sf::Vector2f
  *  Uses physicsim::SCALE as scaling factor
@@ -27,13 +28,14 @@ sf::Vector2f physicsim::Renderer::sfPosition(const RigidBody& body) const {
  * Flag showInfo for diagnostics
  */
 physicsim::Renderer::Renderer(World* sim, bool showInfo) {
+	std::srand(time(NULL));
 	this->showInfo= showInfo;
 	this->sim = sim;
 	this->width = sim->X * physicsim::SCALE; this->height = sim->Y * physicsim::SCALE;
 	this->window.create(sf::VideoMode(this->width, this->height), "Renderer", sf::Style::Default);
 
 	// not sure about paths, this doenst work right now and its late, maybe require user to put in PATH vars, also maybe average it so its somewhat visible
-	if (this->font.loadFromFile("C:/dev/cpp_dev/physicsim/arial.ttf")) {
+	if (this->font.loadFromFile("/home/hirok/dev/physicsim/arial.ttf")) {
 		this->info.setFont(this->font);
 		this->info.setCharacterSize(20);
 		this->info.setPosition(0, this->height - 20);
@@ -46,7 +48,7 @@ physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 		else {
 			this->shapes.push_back(new sf::CircleShape(body->getR() * physicsim::SCALE));
 		}
-		this->shapes.back()->setFillColor(sf::Color::White);
+		this->shapes.back()->setFillColor(sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256));
 		if (body->getType() == physicsim::Rectangle) {
 			this->shapes.back()->setOrigin(physicsim::SCALE * body->getW() / 2, physicsim::SCALE * body->getH() / 2);
 		}

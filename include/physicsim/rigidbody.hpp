@@ -11,7 +11,7 @@ namespace physicsim {
 
 	class RigidBody {
 		protected:
-			float m, theta, aVel, t; // mass, angle of rotation, angular velocity, torque
+			float m, theta, aVel, torque, invM, I, e; // mass, angle of rotation, angular velocity, torque, moment of inertia, coeff of elasticity
 			Matrix pos, lVel, f; // global position, linear velocities, forces
 			Shape type;
 
@@ -23,24 +23,34 @@ namespace physicsim {
 			Matrix vertices[4]; // local coords
 		
 		public:
-			RigidBody(float x, float y, float m, float theta, Shape type);
-			RigidBody(float x, float y, float m, float theta, float w, float h);
-			RigidBody(float x, float y, float m, float theta, float r);
+			RigidBody(float x, float y, float m, float theta, Shape type, float aVel, float torque, float e);
+			RigidBody(float x, float y, float m, float theta, float w, float h, float aVel, float torque, float e);
+			RigidBody(float x, float y, float m, float theta, float r, float aVel, float torque, float e);
 			~RigidBody() = default;
 			Shape getType() const;
 			float getW() const;
 			float getH() const;
 			float getR() const;
 			float getT() const;
+			float getI() const;
+			float getAVel() const;
+			float getTorque() const;
+			float getInvM() const;
+			Matrix getLVel() const;
+			float getE() const;
 			void setLVel(const Matrix& lVel);
 			void setF(const Matrix& f);
 			void setPos(const Matrix& pos);
 			void setTheta(const float& theta);
+			void setAVel(const float& aVel);
+			void setTorque(const float& torque);
 			void addLVel(const Matrix& lVel);
 			void addF(const Matrix& f);
 			void addPos(const Matrix& pos);
 			void addTheta(const float& theta);
 			void addImpulse(Matrix i, float dt);
+			void addAVel(const float& aVel);
+			void addTorque(const float& torque);
 			void update(float dt);
 
 			Matrix getMomentum();
