@@ -6,8 +6,9 @@
 int main() {
 	// setup
 	physicsim::World sim(150, 100);
-	sim.addBody(new physicsim::RigidBody(10, 10, 1000, 0, 5, 0, 0, 0.1));
-	sim.addBody(new physicsim::RigidBody(50, 10, 1000, 0, 5, 0, 0, 0.1));
+	sim.addBody(new physicsim::RigidBody(10, 10, 100, 0, 5, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(50, 10, 100, 0, 5, 0, 0, 1));
+	// sim.addBody(new physicsim::RigidBody(60.5, 10, 1000, 0, 5, 0, 0, 1));
 	sim.bodies[0]->addLVel(physicsim::Matrix(2, 1, { 10, 0 }));
 	physicsim::Renderer ren(&sim, true);
 	double dt = 0;
@@ -32,6 +33,10 @@ int main() {
 					sim.bodies[0]->addLVel(physicsim::Matrix(2, 1, { 0, 2 })); // Apply force upwards
 				else if (event.key.code == sf::Keyboard::Down)
 					sim.bodies[0]->addLVel(physicsim::Matrix(2, 1, { 0, -2 })); // Apply force downwards
+				else if (event.key.code == sf::Keyboard::A)
+					sim.bodies[0]->addAVel(0.1); // Apply force to the left
+				else if (event.key.code == sf::Keyboard::D)
+					sim.bodies[0]->addAVel(-0.1); // Apply force to the right
 			}
 		}
 

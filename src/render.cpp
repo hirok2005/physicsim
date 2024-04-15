@@ -43,17 +43,23 @@ physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 	}
 	for (physicsim::RigidBody* body : sim->bodies) {
 		if (body->getType() == physicsim::Rectangle) {
-			this->shapes.push_back(new sf::RectangleShape(sf::Vector2f(body->getW() * physicsim::SCALE, body->getH() * physicsim::SCALE)));
+			this->shapes.push_back(new physicsim::ShapeGroup({ new sf::RectangleShape(sf::Vector2f(body->getW() * physicsim::SCALE, body->getH() * physicsim::SCALE)) }));
 		}
 		else {
-			this->shapes.push_back(new sf::CircleShape(body->getR() * physicsim::SCALE));
+			this->shapes.push_back(new physicsim::ShapeGroup({ new sf::CircleShape(body->getR() * physicsim::SCALE) }));
 		}
-		this->shapes.back()->setFillColor(sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256));
+		// this->shapes.back()->setFillColor(sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256));
 		if (body->getType() == physicsim::Rectangle) {
-			this->shapes.back()->setOrigin(physicsim::SCALE * body->getW() / 2, physicsim::SCALE * body->getH() / 2);
+			this->shapes.back()->setOrigin(sf::Vector2(physicsim::SCALE * body->getW() / 2, physicsim::SCALE * body->getH() / 2));
 		}
 		else {
-			this->shapes.back()->setOrigin(physicsim::SCALE * body->getR(), physicsim::SCALE * body->getR());
+			this->shapes.back()->addShape(new sf::CircleShape(10, 3));
+
+			// ugly and not centered, fix later for aesthetics
+			this->shapes.back()->shapes.back()->setPosition(sf::Vector2f(physicsim::SCALE * body->getR(), 0));
+			this->shapes.back()->shapes.back()->setFillColor(sf::Color::Blue);
+			this->shapes.back()->setOrigin(sf::Vector2f(physicsim::SCALE * body->getR(), physicsim::SCALE * body->getR()));
+			
 		}
 	}
 
@@ -76,3 +82,38 @@ void physicsim::Renderer::update(const float& dt) {
 	}
 	this->window.display();
 }
+
+
+
+physicsim::ShapeGroup::ShapeGroup(std::initializer_list<sf::Shape*> shapes) {
+	for (int i = 0; i < shapes.size(); i++) {
+		this->shapes.push_back(*(shapes.begin() + i)); //pointer/iterator magic
+	}
+}
+void physicsim::ShapeGroup::addShape(sf::Shape* shape) {
+	this->shapes.push_back(shape);
+	// this->shapes.back()->setOrigin(this->shapes[0]->getOrigin());
+}
+
+void physicsim::ShapeGroup::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	for (int i = 0; i < this->shapes.size(); i++) {
+		target.draw(*this->shapes[i], states);
+	}
+}
+
+void physicsim::ShapeGroup::setPosition(sf::Vector2f position) {
+	for (int i = 0; i < this->shapes.size(); i++) {
+		this->shapes[i]->setPosition(position);
+	}
+}
+
+void physicsim::ShapeGroup::setOrigin(sf::Vector2f position) {
+	this->shapes[0]->setOrigin(position);
+}
+
+void physicsim::ShapeGroup::setRotation(float angle) {
+	for (int i = 0; i < this->shapes.size(); i++) {
+		this->shapes[i]->setRotation(angle);
+	}
+}
+
