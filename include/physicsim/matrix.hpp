@@ -6,6 +6,7 @@
 #define PHYSICSIM_MATRIX_HPP
 
 #include <initializer_list>
+#include <vector>
 #include <cmath>
 
 namespace physicsim {
@@ -13,7 +14,7 @@ namespace physicsim {
 		private:
 			int rows; int cols;
 		public:
-			float* arr; // matrix is stored as 1 contiguous array
+			std::vector<float> arr; // matrix is stored as 1 contiguous array
 			Matrix(); //default constructor, sets rows and cols to zero
 			Matrix(int rows, int cols);
 			Matrix(int rows, int cols, std::initializer_list<float> vals); //second constructor for when you have all values, consider std::initialiser_list

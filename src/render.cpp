@@ -48,14 +48,13 @@ physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 		else {
 			this->shapes.push_back(new physicsim::ShapeGroup({ new sf::CircleShape(body->getR() * physicsim::SCALE) }));
 		}
-		// this->shapes.back()->setFillColor(sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256));
+		this->shapes.back()->shapes.back()->setFillColor(sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256));
 		if (body->getType() == physicsim::Rectangle) {
 			this->shapes.back()->setOrigin(sf::Vector2(physicsim::SCALE * body->getW() / 2, physicsim::SCALE * body->getH() / 2));
 		}
 		else {
-			this->shapes.back()->addShape(new sf::CircleShape(10, 3));
-
 			// ugly and not centered, fix later for aesthetics
+			this->shapes.back()->addShape(new sf::CircleShape(10, 3));
 			this->shapes.back()->shapes.back()->setPosition(sf::Vector2f(physicsim::SCALE * body->getR(), 0));
 			this->shapes.back()->shapes.back()->setFillColor(sf::Color::Blue);
 			this->shapes.back()->setOrigin(sf::Vector2f(physicsim::SCALE * body->getR(), physicsim::SCALE * body->getR()));

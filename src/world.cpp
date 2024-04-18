@@ -1,7 +1,6 @@
 #include "physicsim/world.hpp"
 #include "physicsim/constants.hpp"
 #include "physicsim/collisions.hpp"
-#include <iostream>
 // world is in centimetres
 
 /*! Constructs world with dimensions x, y
@@ -12,7 +11,6 @@ physicsim::World::World(int x, int y) : X(x), Y(y) {}
  */
 void physicsim::World::addBody(physicsim::RigidBody* body) {
 	this->bodies.push_back(body);
-	std::cout << "f" << std::endl;
 }
 
 /*! Function to update all bodies in the world. Runs with the given delta time for all suvatesque equations

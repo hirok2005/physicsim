@@ -4,6 +4,7 @@
 
 #include "physicsim/matrix.hpp"
 #include <stdexcept>
+#include <vector>
 #include <iostream>
 
 /*! Default constructor for Matrix class
@@ -15,7 +16,7 @@
  */
 physicsim::Matrix::Matrix() {
 	this->rows = 0; this->cols = 0;
-	this->arr = nullptr;
+	this->arr = std::vector<float>(0);
 }
 
 /*! Construct empty matrix with specified rows and columns
@@ -25,7 +26,7 @@ physicsim::Matrix::Matrix() {
  */
 physicsim::Matrix::Matrix(int rows, int cols) {
 	this->rows = rows; this->cols = cols;
-	this->arr = new float[rows * cols];
+	this->arr = std::vector<float>(rows * cols);
 }
 
 /*! Construct matrix with specified rows and columns, and fill in  with specified values
@@ -36,7 +37,7 @@ physicsim::Matrix::Matrix(int rows, int cols, std::initializer_list<float> vals)
 		throw std::out_of_range("initialiser list does not match matrix dimensions");
 	}
 	this->rows = rows; this->cols = cols;
-	this->arr = new float[rows * cols];
+	this->arr = std::vector<float>(rows * cols);
 	for(int i{}; i < rows * cols; i++) {
 		this->arr[i] = *(vals.begin() + i); //pointer/iterator magic
 	}
@@ -249,8 +250,9 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
  */
 physicsim::Matrix& physicsim::Matrix::operator=(const physicsim::Matrix& other) {
 	this->rows = other.getRows(); this->cols = other.getCols();
-	this->arr = new float[this->rows * this->cols];
-	std::copy(other.arr, other.arr + this->rows * this->cols, arr);
+	// this->arr = new float[this->rows * this->cols];
+	// std::copy(other.arr, other.arr + this->rows * this->cols, arr);
+	this->arr = other.arr;
 	return *this;
 }
 

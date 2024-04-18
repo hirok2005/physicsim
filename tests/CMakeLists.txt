@@ -17,5 +17,5 @@ target_compile_features(testSim PRIVATE cxx_std_23)
 
 # Add the tests with the executable and the command-line arguments
 # Note: Assuming you want to run two separate tests for matrix and update
-add_test(NAME physicsim.funcs.matrix COMMAND testMat matrix)
-add_test(NAME physicsim.funcs.simCOMMAND COMMAND teste2 sim)
+add_test(NAME physicsim.funcs.matrix COMMAND testMat)
+add_test(NAME physicsim.funcs.sim COMMAND testSim)
