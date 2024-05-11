@@ -140,15 +140,18 @@ void physicsim::Collisions::collisionHandler(RigidBody* body1, RigidBody* body2,
 void physicsim::Collisions::resolve(RigidBody* body1, RigidBody* body2, const Manifold& manifold) {
 	float J = -(1+std::min(body1->getE(), body2->getE())) * (body2->getLVel() - body1->getLVel()).dot(manifold.normal);
 	float divisor = manifold.normal.vectorMagnitudeSqrd() * (body1->getInvM() + body2->getInvM());
+  physicsim::Matrix body1ToColPerp = (manifold.point - body1->getPos()).perp();
+  physicsim::Matrix body2ToColPerp = (manifold.point - body2->getPos()).perp();
 
 	// pretty jank right now, when I implement the other types will be more concise
+  // note circle circle collisions dont need rotation stuff, but now we can use this for the other collisions
 	if (body1->getType() == physicsim::Circle && body1->getType() == physicsim::Circle) {
-		// divisor += body1->getI() * std::pow(body1->getR(), 2) + body2->getI() * std::pow(body2->getR(), 2);
+		divisor += body1->getI() * std::pow(body2ToColPerp.dot(manifold.normal), 2) + body2->getI() * std::pow(body2ToColPerp.dot(manifold.normal), 2);
 		J /= divisor;
 
 		body1->addLVel(manifold.normal.scalarMultiply(-J * body1->getInvM()));
 		body2->addLVel(manifold.normal.scalarMultiply(J * body2->getInvM()));
-		// body1->addAVel(body1->getR() * J * body1->getI());
-		// body2->addAVel(body2->getR() * J * body2->getI());
-	}
+    body1->addAVel(body1ToColPerp.dot(manifold.normal) * J * body1->getI());
+    body2->addAVel(body2ToColPerp.dot(manifold.normal) * J * body2->getI());
+  }
 }

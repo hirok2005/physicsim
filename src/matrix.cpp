@@ -328,6 +328,17 @@ physicsim::Matrix physicsim::Matrix::normalise() const {
 	return t;
 }
 
+
+/*! Returns the perpendicular of vector
+ * */
+physicsim::Matrix physicsim::Matrix::perp() const {
+  // TODO: only for 2d vector right now (all we will need) can implement for n-dimensional later
+	if (this->colOutOfBounds(1)) {
+		throw std::invalid_argument("Must be vector");
+	}
+  return physicsim::Matrix(2, 1, {this->arr[1], -this->arr[0]});
+}
+
 //! Getter for cols member
 int physicsim::Matrix::getCols() const {
 	return this->cols;

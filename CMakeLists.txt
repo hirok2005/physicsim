@@ -9,16 +9,6 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 # Check if SFML is already installed
 find_package(SFML QUIET COMPONENTS graphics window)
 
-# If SFML not found, use FetchContent to download SFML
-if(NOT SFML_FOUND)
-  include(FetchContent)
-  FetchContent_Declare(SFML
-      GIT_REPOSITORY https://github.com/SFML/SFML.git
-      GIT_TAG 2.6.x
-  )
-  FetchContent_MakeAvailable(SFML)  
-endif()
-
 # Set SFML_DIR to the directory containing SFMLConfig.cmake
 if(SFML_FOUND)
   set(SFML_DIR ${SFML_DIR}/lib/cmake/SFML)

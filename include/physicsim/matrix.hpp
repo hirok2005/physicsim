@@ -40,6 +40,7 @@ namespace physicsim {
 			float vectorMagnitudeSqrd() const;
 			float vectorMagnitude() const;
 			Matrix normalise() const;
+      Matrix perp() const;
 
 			int getRows() const;
 			int getCols() const;

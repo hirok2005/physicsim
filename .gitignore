@@ -13,3 +13,7 @@ CMakeCache.txt
 *.cmake
 *.a
 Makefile
+
+# clangd
+compile_commands.json
+.cache
