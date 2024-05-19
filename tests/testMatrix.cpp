@@ -72,6 +72,10 @@ int main() {
 
 	b.print();
 
+	physicsim::Matrix norm(2, 1, {1, 1});
+	norm = norm.normalise();
+	norm.print();
+
 	return 0;
 
 }

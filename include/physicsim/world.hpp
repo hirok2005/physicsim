@@ -12,7 +12,7 @@ namespace physicsim {
 
 			World(int x, int y);
 			void addBody(RigidBody* body);
-			void step(float dt); // run at each loop
+			void step(double dt); // run at each loop
 	};
 }
 

@@ -22,7 +22,7 @@ namespace physicsim {
 			virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 			virtual void setPosition(sf::Vector2f position);
 			virtual void setOrigin(sf::Vector2f position);
-			virtual void setRotation(float angle);
+			virtual void setRotation(double angle);
 	};
 
 
@@ -34,7 +34,7 @@ namespace physicsim {
 			bool showInfo;
 			sf::Vector2f sfPosition(const RigidBody& body) const;
 			Renderer(World* sim, bool showFPS);
-			void update(const float& dt);
+			void update(const double& dt);
 			sf::RenderWindow window;
 			sf::Text info;
 			sf::Font font;

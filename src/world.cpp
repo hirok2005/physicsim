@@ -15,7 +15,7 @@ void physicsim::World::addBody(physicsim::RigidBody* body) {
 
 /*! Function to update all bodies in the world. Runs with the given delta time for all suvatesque equations
  */
-void physicsim::World::step(float dt) {
+void physicsim::World::step(double dt) {
 	for (int i = 0; i < this->bodies.size(); i++) {
 		this->bodies[i]->update(dt);
 	}

@@ -11,47 +11,47 @@ namespace physicsim {
 
 	class RigidBody {
 		protected:
-			float m, theta, aVel, torque, invM, I, e; // mass, angle of rotation, angular velocity, torque, moment of inertia, coeff of elasticity
+			double m, theta, aVel, torque, invM, I, e; // mass, angle of rotation, angular velocity, torque, moment of inertia, coeff of elasticity
 			Matrix pos, lVel, f; // global position, linear velocities, forces
 			Shape type;
 
 			// for circles
-			float r = -1;
+			double r = -1;
 
 			// for rects
-			float w = -1, h = -1;
+			double w = -1, h = -1;
 			Matrix vertices[4]; // local coords
 		
 		public:
-			RigidBody(float x, float y, float m, float theta, Shape type, float aVel, float torque, float e);
-			RigidBody(float x, float y, float m, float theta, float w, float h, float aVel, float torque, float e);
-			RigidBody(float x, float y, float m, float theta, float r, float aVel, float torque, float e);
+			RigidBody(double x, double y, double m, double theta, Shape type, double aVel, double torque, double e);
+			RigidBody(double x, double y, double m, double theta, double w, double h, double aVel, double torque, double e);
+			RigidBody(double x, double y, double m, double theta, double r, double aVel, double torque, double e);
 			~RigidBody() = default;
 			Shape getType() const;
-			float getW() const;
-			float getH() const;
-			float getR() const;
-			float getT() const;
-			float getI() const;
-			float getAVel() const;
-			float getTorque() const;
-			float getInvM() const;
+			double getW() const;
+			double getH() const;
+			double getR() const;
+			double getT() const;
+			double getI() const;
+			double getAVel() const;
+			double getTorque() const;
+			double getInvM() const;
 			Matrix getLVel() const;
-			float getE() const;
+			double getE() const;
 			void setLVel(const Matrix& lVel);
 			void setF(const Matrix& f);
 			void setPos(const Matrix& pos);
-			void setTheta(const float& theta);
-			void setAVel(const float& aVel);
-			void setTorque(const float& torque);
+			void setTheta(const double& theta);
+			void setAVel(const double& aVel);
+			void setTorque(const double& torque);
 			void addLVel(const Matrix& lVel);
 			void addF(const Matrix& f);
 			void addPos(const Matrix& pos);
-			void addTheta(const float& theta);
-			void addImpulse(Matrix i, float dt);
-			void addAVel(const float& aVel);
-			void addTorque(const float& torque);
-			void update(float dt);
+			void addTheta(const double& theta);
+			void addImpulse(Matrix i, double dt);
+			void addAVel(const double& aVel);
+			void addTorque(const double& torque);
+			void update(double dt);
 
 			Matrix getMomentum();
 			Matrix(*getVertices()) [4];

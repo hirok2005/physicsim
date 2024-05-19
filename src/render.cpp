@@ -6,19 +6,15 @@
 #include "physicsim/world.hpp"
 #include "physicsim/constants.hpp"
 #include <string>
+#include <numbers>
 #include <stdlib.h>
 
 /*! Converts position of body in physicsim::vector to sf::Vector2f
  *  Uses physicsim::SCALE as scaling factor
  */
-sf::Vector2f physicsim::Renderer::sfPosition(const RigidBody& body) const {
+sf::Vector2f physicsim::Renderer::sfPosition(const physicsim::RigidBody& body) const {
 	Matrix pos = body.getPos();
-	if (body.getType() == physicsim::Rectangle) {
-		return sf::Vector2f((pos(0, 0)) * physicsim::SCALE, this->height - pos(1, 0) * physicsim::SCALE);
-	}
-	else {
-		return sf::Vector2f(pos(0, 0) * physicsim::SCALE, this->height - pos(1, 0) * physicsim::SCALE);
-	}
+	return sf::Vector2f(pos(0, 0) * physicsim::SCALE, this->height - pos(1, 0) * physicsim::SCALE);
 }
 
 /*! Constructor for renderer
@@ -50,7 +46,7 @@ physicsim::Renderer::Renderer(World* sim, bool showInfo) {
 		}
 		this->shapes.back()->shapes.back()->setFillColor(sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256));
 		if (body->getType() == physicsim::Rectangle) {
-			this->shapes.back()->setOrigin(sf::Vector2(physicsim::SCALE * body->getW() / 2, physicsim::SCALE * body->getH() / 2));
+			this->shapes.back()->setOrigin(sf::Vector2((float)(physicsim::SCALE * body->getW() / 2), (float)(physicsim::SCALE * body->getH() / 2)));
 		}
 		else {
 			// ugly and not centered, fix later for aesthetics
@@ -68,11 +64,11 @@ physicsim::Renderer::Renderer(World* sim, bool showInfo) {
  *  Called every render cycle
  *  Can show time delta from processing
  */
-void physicsim::Renderer::update(const float& dt) {
+void physicsim::Renderer::update(const double& dt) {
 	this->window.clear();
 	for (int i = 0; i < this->shapes.size(); i++) {
 		this->shapes[i]->setPosition(this->sfPosition(*this->sim->bodies[i]));
-		this->shapes[i]->setRotation(this->sim->bodies[i]->getT() * physicsim::RAD_TO_DEG);
+		this->shapes[i]->setRotation(this->sim->bodies[i]->getT() * 180 / std::numbers::pi);
 		this->window.draw(*this->shapes[i]);
 	}
 	if (this->showInfo) {
@@ -110,7 +106,7 @@ void physicsim::ShapeGroup::setOrigin(sf::Vector2f position) {
 	this->shapes[0]->setOrigin(position);
 }
 
-void physicsim::ShapeGroup::setRotation(float angle) {
+void physicsim::ShapeGroup::setRotation(double angle) {
 	for (int i = 0; i < this->shapes.size(); i++) {
 		this->shapes[i]->setRotation(angle);
 	}

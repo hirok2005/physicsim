@@ -7,18 +7,18 @@
 namespace physicsim {
 	namespace Collisions {
 		struct Manifold {
-			float depth;
+			double depth;
 			Matrix normal;
 			Matrix point;
 		};
 
-		bool collisionDetect(RigidBody* body1, RigidBody* body2);
-		void collisionHandler(RigidBody* body1, RigidBody* body2, float dt); // everything collision related in this, simply call this every loop and is handles it all
-		bool circleCircleCollisionDetect(RigidBody* circle1, RigidBody* circle2);
-		bool rectCircleCollisionDetect(RigidBody* rect, RigidBody* circle);
-		bool rectRectCollisionDetect(RigidBody* rect1, RigidBody* rect2);
+		bool collisionDetect(RigidBody* body1, RigidBody* body2, Manifold& manifold);
+		void collisionHandler(RigidBody* body1, RigidBody* body2, double dt); // everything collision related in this, simply call this every loop and is handles it all
+		bool circleCircleCollisionDetect(RigidBody* circle1, RigidBody* circle2, Manifold& manifold);
+		bool rectCircleCollisionDetect(RigidBody* rect, RigidBody* circle, Manifold& manifold);
+		bool rectRectCollisionDetect(RigidBody* rect1, RigidBody* rect2, Manifold& manifold);
 		void positionalCorrection(RigidBody* body1, RigidBody* body2, const Manifold& manifold);
-		void collisionHandler(RigidBody * body1, RigidBody * body2, float dt);
+		void collisionHandler(RigidBody * body1, RigidBody * body2, double dt);
 		void getContactPoint(Manifold * collision, RigidBody * body1, RigidBody * body2);
 		void resolve(RigidBody* body1, RigidBody* body2, const Manifold& manifold);
 	}

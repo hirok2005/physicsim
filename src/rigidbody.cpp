@@ -4,7 +4,7 @@
 
 /*! Constructs a rigidobody with given position, mass, angle from horizontal and shape
  */
-physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, physicsim::Shape type, float aVel, float torque, float e) {
+physicsim::RigidBody::RigidBody(double x, double y, double m, double theta, physicsim::Shape type, double aVel, double torque, double e) {
 	this->pos = physicsim::Matrix(2, 1, {x, y}); //set x and y values
 	this->m = m;
 	this->theta = theta;
@@ -18,7 +18,7 @@ physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, physicsi
 
 /*! Constructs a rectangle rigidbody with given position, mass, angle from horizontal and dimensions
  */
-physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float w, float h, float aVel, float torque, float e) : vertices{physicsim::Matrix(2, 1, {-w / 2, h / 2}), physicsim::Matrix(2, 1, {w / 2, h / 2}), physicsim::Matrix(2, 1, {w / 2, -h / 2}), physicsim::Matrix(2, 1, {-w / 2, -h / 2})} {
+physicsim::RigidBody::RigidBody(double x, double y, double m, double theta, double w, double h, double aVel, double torque, double e) : vertices{physicsim::Matrix(2, 1, {-w / 2, h / 2}), physicsim::Matrix(2, 1, {w / 2, h / 2}), physicsim::Matrix(2, 1, {w / 2, -h / 2}), physicsim::Matrix(2, 1, {-w / 2, -h / 2})} {
 	this->pos = physicsim::Matrix(2, 1, { x, y }); //set x and y values
 	this->m = m;
 	this->theta = theta;
@@ -38,7 +38,7 @@ physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float w,
 
 /*! Construct a circle rigidbody with position, mass, angle and radius
 */
-physicsim::RigidBody::RigidBody(float x, float y, float m, float theta, float r, float aVel, float torque, float e) {
+physicsim::RigidBody::RigidBody(double x, double y, double m, double theta, double r, double aVel, double torque, double e) {
 	this->pos = physicsim::Matrix(2, 1, { x, y }); //set x and y values
 	this->m = m;
 	this->theta = theta;
@@ -60,15 +60,15 @@ physicsim::Shape physicsim::RigidBody::getType() const {
 
 /*! Changes velocity based on given impulse
  */
-void physicsim::RigidBody::addImpulse(physicsim::Matrix i, float dt) {
+void physicsim::RigidBody::addImpulse(physicsim::Matrix i, double dt) {
 	this->f = i.scalarDivide(dt); //Impulse to force. Update will take care of applying the force. Not as efficient as directly turning impulse to velocity
 }
 
-void physicsim::RigidBody::addAVel(const float &aVel) {
+void physicsim::RigidBody::addAVel(const double &aVel) {
 	this->aVel += aVel;
 }
 
-void physicsim::RigidBody::addTorque(const float &torque) {
+void physicsim::RigidBody::addTorque(const double &torque) {
 	this->torque += torque;
 }
 
@@ -78,7 +78,7 @@ physicsim::Matrix physicsim::RigidBody::getMomentum() {
 
 /*! Applies uniform acceleration for each timestep, updates position and resets force
  */
-void physicsim::RigidBody::update(float dt) {
+void physicsim::RigidBody::update(double dt) {
 	this->lVel += this->f.scalarDivide(this->m).scalarMultiply(dt);
 	this->pos += this->lVel.scalarMultiply(dt);
 	this->f = physicsim::Matrix(2, 1, { 0, 0 });
@@ -87,44 +87,44 @@ void physicsim::RigidBody::update(float dt) {
 	this->torque = 0;
 }
 
-float physicsim::RigidBody::getH() const {
+double physicsim::RigidBody::getH() const {
 	if (this->type == physicsim::Circle) {
 		return -1;
 	}
 	return this->h;
 }
 
-float physicsim::RigidBody::getW() const {
+double physicsim::RigidBody::getW() const {
 	if (this->type == physicsim::Circle) {
 		return -1;
 	}
 	return this->w;
 }
 
-float physicsim::RigidBody::getR() const {
+double physicsim::RigidBody::getR() const {
 	if (this->type == physicsim::Rectangle) {
 		return -1;
 	}
 	return this->r;
 }
 
-float physicsim::RigidBody::getT() const {
+double physicsim::RigidBody::getT() const {
 	return this->theta;
 }
 
-float physicsim::RigidBody::getI() const {
+double physicsim::RigidBody::getI() const {
     return this->I;
 }
 
-float physicsim::RigidBody::getAVel() const {
+double physicsim::RigidBody::getAVel() const {
     return this->aVel;
 }
 
-float physicsim::RigidBody::getTorque() const {
+double physicsim::RigidBody::getTorque() const {
     return this->torque;
 }
 
-float physicsim::RigidBody::getInvM() const {
+double physicsim::RigidBody::getInvM() const {
     return this->invM;
 }
 
@@ -132,7 +132,7 @@ physicsim::Matrix physicsim::RigidBody::getLVel() const {
     return this->lVel;
 }
 
-float physicsim::RigidBody::getE() const {
+double physicsim::RigidBody::getE() const {
 return this->e;
 }
 
@@ -148,15 +148,15 @@ void physicsim::RigidBody::setPos(const Matrix& pos) {
 	this->pos = pos;
 }
 
-void physicsim::RigidBody::setTheta(const float& theta) {
+void physicsim::RigidBody::setTheta(const double& theta) {
 	this->theta = theta;
 }
 
-void physicsim::RigidBody::setAVel(const float &aVel) {
+void physicsim::RigidBody::setAVel(const double &aVel) {
 	this->aVel = aVel;
 }
 
-void physicsim::RigidBody::setTorque(const float &torque) {
+void physicsim::RigidBody::setTorque(const double &torque) {
 	this->torque = torque;
 }
 
@@ -172,7 +172,7 @@ void physicsim::RigidBody::addPos(const Matrix& pos) {
 	this->pos += pos;
 }
 
-void physicsim::RigidBody::addTheta(const float& theta) {
+void physicsim::RigidBody::addTheta(const double& theta) {
 	this->theta += theta;
 }
 
