@@ -130,6 +130,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [ ] Optimise
 - [ ] Add springs, joints etc
 - [ ] Finish README
+- [ ] Complete docs
 - [ ] Tidy up
 
 See the [open issues](https://github.com/hirok2005/physicsim/issues) for a full list of proposed features (and known issues).
