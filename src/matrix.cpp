@@ -267,6 +267,17 @@ physicsim::Matrix& physicsim::Matrix::operator=(const physicsim::Matrix& other) 
 	return *this;
 }
 
+bool physicsim::Matrix::operator==(const physicsim::Matrix& other) {
+    if (other.getRows() != this->rows || other.getCols() != this->cols) {
+		return false;
+	}
+	for (int i = 0; i < this->rows * this->cols; i++) {
+		if (this->arr[i] != other.arr[i]) {
+			return false;
+		}
+	}
+}
+
 double& physicsim::Matrix::operator()(const int row, const int col) {
 	if (!this->indexOutOfBounds(row, col)) {
 		return this->arr[row * this->cols + col];

@@ -35,6 +35,7 @@ namespace physicsim {
 			Matrix& operator-=(const double& scalar);
 			Matrix operator*(const Matrix& other) const;
 			Matrix& operator=(const Matrix& other);
+			bool operator==(const Matrix& other);
 			double& operator()(const int row, const int col); //only c++23 has multi parameter operator[]
 			const double& operator()(const int row, const int col) const;
 			//maybe an index operator to return a row?
