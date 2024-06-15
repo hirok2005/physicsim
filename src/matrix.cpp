@@ -11,7 +11,7 @@
  * sets rows and cols to 0, and arr to nullptr
  *
  * Be careful not to free this with nullptr
- * 
+ *
  * TODO: nullptr checks before indexing
  */
 physicsim::Matrix::Matrix() {
@@ -33,12 +33,12 @@ physicsim::Matrix::Matrix(int rows, int cols) {
  * throws error if list does not match dimensions
  */
 physicsim::Matrix::Matrix(int rows, int cols, std::initializer_list<double> vals) {
-	if(vals.size() != rows * cols) {
+	if (vals.size() != rows * cols) {
 		throw std::out_of_range("initialiser list does not match matrix dimensions");
 	}
 	this->rows = rows; this->cols = cols;
 	this->arr = std::vector<double>(rows * cols);
-	for(int i{}; i < rows * cols; i++) {
+	for (int i{}; i < rows * cols; i++) {
 		this->arr[i] = *(vals.begin() + i); //pointer/iterator magic
 	}
 }
@@ -102,14 +102,14 @@ physicsim::Matrix physicsim::Matrix::scalarDivide(double lambda) const {
  * project vector onto other vector using standard projection formula
  */
 physicsim::Matrix physicsim::Matrix::project(const physicsim::Matrix& other, bool isNorm) const {
-  double scalar = this->dot(other);
-  if (!isNorm) {
-    scalar /= other.dot(other);
-  }
-  return other.scalarMultiply(scalar);
+	double scalar = this->dot(other);
+	if (!isNorm) {
+		scalar /= other.dot(other);
+	}
+	return other.scalarMultiply(scalar);
 }
 
-/*! Dot product of 2 matrices. Errors when matrices not same size. 
+/*! Dot product of 2 matrices. Errors when matrices not same size.
  *
  * TODO: require that matrices are vectors
  */
@@ -135,7 +135,7 @@ physicsim::Matrix physicsim::Matrix::operator+(const Matrix& other) const {
 	physicsim::Matrix t(this->rows, this->cols);
 
 	for (int i = 0; i < this->rows * this->cols; i++) {
-		t.arr[i] = this->arr[i]+ other.arr[i];
+		t.arr[i] = this->arr[i] + other.arr[i];
 	}
 
 	return t;
@@ -238,7 +238,7 @@ physicsim::Matrix physicsim::Matrix::operator*(const Matrix& other) const {
 		throw std::invalid_argument("left matrix must have same number of columns as left matrix rows");
 	}
 	physicsim::Matrix t(this->rows, other.cols);
-	int runningTot;
+	double runningTot;
 	for (int leftRow = 0; leftRow < this->rows; leftRow++) {
 		for (int rightCol = 0; rightCol < other.cols; rightCol++) {
 			runningTot = 0;
@@ -268,7 +268,7 @@ physicsim::Matrix& physicsim::Matrix::operator=(const physicsim::Matrix& other) 
 }
 
 double& physicsim::Matrix::operator()(const int row, const int col) {
-	if(!this->indexOutOfBounds(row, col)) {
+	if (!this->indexOutOfBounds(row, col)) {
 		return this->arr[row * this->cols + col];
 	}
 	throw std::out_of_range("Index out of bounds"); //add more personalised error message later
@@ -282,7 +282,7 @@ double& physicsim::Matrix::operator()(const int row, const int col) {
  * TODO: version for single column or single row
  */
 const double& physicsim::Matrix::operator()(const int row, const int col) const {
-	if(!this->indexOutOfBounds(row, col)) {
+	if (!this->indexOutOfBounds(row, col)) {
 		return this->arr[row * this->cols + col];
 	}
 	throw std::out_of_range("Index out of bounds");
@@ -297,7 +297,7 @@ int physicsim::Matrix::getRows() const {
  */
 int physicsim::Matrix::colOutOfBounds(int col) const
 {
-	if(this->cols > col || col < 0) {
+	if (this->cols > col || col < 0) {
 		return 1;
 	}
 	return 0;
@@ -310,7 +310,7 @@ double physicsim::Matrix::vectorMagnitude() const {
 		throw std::invalid_argument("Must be vector");
 	}
 	double res = this->dot(*this);
-  return std::sqrt(res);
+	return std::sqrt(res);
 }
 
 /*! Calculates vector magnitude squared
@@ -319,14 +319,14 @@ double physicsim::Matrix::vectorMagnitudeSqrd() const {
 	if (this->colOutOfBounds(1)) {
 		throw std::invalid_argument("Must be vector");
 	}
-  return this->dot(*this);
+	return this->dot(*this);
 }
 
 physicsim::Matrix physicsim::Matrix::normalise() const {
 	if (this->colOutOfBounds(1)) {
 		throw std::invalid_argument("Must be vector");
 	}
-	Matrix t = *this;
+	physicsim::Matrix t = *this;
 	double distanceInv = 1 / this->vectorMagnitude();
 	t = t.scalarMultiply(distanceInv);
 	return t;
@@ -336,11 +336,11 @@ physicsim::Matrix physicsim::Matrix::normalise() const {
 /*! Returns the perpendicular of vector
  * */
 physicsim::Matrix physicsim::Matrix::perp() const {
-  // TODO: only for 2d vector right now (all we will need) can implement for n-dimensional later
+	// TODO: only for 2d vector right now (all we will need) can implement for n-dimensional later
 	if (this->colOutOfBounds(1)) {
 		throw std::invalid_argument("Must be vector");
 	}
-  return physicsim::Matrix(2, 1, {this->arr[1], -this->arr[0]});
+	return physicsim::Matrix(2, 1, { -this->arr[1], this->arr[0] });
 }
 
 //! Getter for cols member
@@ -353,7 +353,7 @@ int physicsim::Matrix::getCols() const {
 physicsim::Matrix physicsim::rotationMat2D(double theta)
 {
 	double cTheta = std::cos(theta); double sTheta = std::sin(theta);
-	return physicsim::Matrix(2, 2, { cTheta, sTheta, -sTheta, cTheta });
+	return physicsim::Matrix(2, 2, { cTheta, -sTheta, sTheta, cTheta });
 }
 
 /* Return 0 if index out of bounds, return 1 if index in bounds
@@ -370,8 +370,8 @@ int physicsim::Matrix::indexOutOfBounds(int row, int col) const {
  * TODO: remove loops to lower time complexity
  */
 void physicsim::Matrix::print() const {
-	for(int i{}; i < this->rows; i++) {
-		for(int j{}; j < this->cols; j++) {
+	for (int i{}; i < this->rows; i++) {
+		for (int j{}; j < this->cols; j++) {
 			std::cout << (*this)(i, j) << " ";
 		}
 		std::cout << std::endl;

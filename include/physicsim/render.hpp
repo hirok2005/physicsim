@@ -2,6 +2,7 @@
 #define PHYSICSIM_RENDER_HPP
 
 #include <vector>
+#include <deque>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -10,9 +11,7 @@
 
 
 namespace physicsim {
-	// maybe its own namespace
-	constexpr int SCALE = 10; // idk where to put, probably should be in class
-	// TODO: group objects so we can see rotation of circles
+	constexpr int SCALE = 10;
 	class ShapeGroup : public sf::Drawable {
 		private:
 		public:
@@ -32,6 +31,12 @@ namespace physicsim {
 			int width, height;
 			std::vector<physicsim::ShapeGroup*> shapes;
 			bool showInfo;
+			// Buffer to store recent FPS values
+			std::deque<double> fpsBuffer;
+			const size_t fpsBufferSize = 100; // Number of frames to average over
+
+			double getAverageFPS() const;
+
 			sf::Vector2f sfPosition(const RigidBody& body) const;
 			Renderer(World* sim, bool showFPS);
 			void update(const double& dt);

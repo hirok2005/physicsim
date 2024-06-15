@@ -6,9 +6,10 @@
 
 int main() {
     // setup
-    physicsim::World sim(150, 100);
+    constexpr double unit = 1;
+    physicsim::World sim(800, 85);
     physicsim::Matrix coords[4];
-    sim.addBody(new physicsim::RigidBody(10, 10, 1, 0.5, 5, 0, 0, 0));
+    sim.addBody(new physicsim::RigidBody(50, 50, 0, 0, 30, 30, 0, 0, 0));
     sim.addBody(new physicsim::RigidBody(50, 50, 0, 0, 30, 30, 0, 0, 0));
     sim.addBody(new physicsim::RigidBody(10, 10, 1, 0, 1, 0, 0, 0));
     physicsim::Renderer ren(&sim, true);
@@ -25,22 +26,28 @@ int main() {
             // Handle key presses
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Left)
-                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { -0.5, 0 })); // Apply force to the left
+                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { -unit, 0 })); // Apply force to the left
                 else if (event.key.code == sf::Keyboard::Right)
-                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { 0.5, 0 })); // Apply force to the right
+                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { unit, 0 })); // Apply force to the right
                 else if (event.key.code == sf::Keyboard::Up)
-                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { 0, 0.5 })); // Apply force upwards
+                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { 0, unit })); // Apply force upwards
                 else if (event.key.code == sf::Keyboard::Down)
-                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { 0, -0.5 })); // Apply force downwards
+                    sim.bodies[0]->addPos(physicsim::Matrix(2, 1, { 0, -unit })); // Apply force downwards
+                if (event.key.code == sf::Keyboard::A)
+                    sim.bodies[1]->addTheta(-0.1);
+                else if (event.key.code == sf::Keyboard::D)
+                    sim.bodies[1]->addTheta(0.1);
             }
         }
+
+
 
         ren.update(dt);
         auto endTime = std::chrono::high_resolution_clock::now();
         dt = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime).count();
         //sim.collisionHandler(dt);
         physicsim::Collisions::Manifold man;
-        std::cout << physicsim::Collisions::rectCircleCollisionDetect(sim.bodies[1], sim.bodies[0], man) << "\n";
+        std::cout << physicsim::Collisions::rectRectCollisionDetect(sim.bodies[1], sim.bodies[0], man) << "\n";
         // sim.bodies[1]->addTheta(0.0001);
         // sim.bodies[2]->setPos(man.point);
     }

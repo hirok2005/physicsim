@@ -68,17 +68,32 @@ void physicsim::Renderer::update(const double& dt) {
 	this->window.clear();
 	for (int i = 0; i < this->shapes.size(); i++) {
 		this->shapes[i]->setPosition(this->sfPosition(*this->sim->bodies[i]));
-		this->shapes[i]->setRotation(this->sim->bodies[i]->getT() * 180 / std::numbers::pi);
+		this->shapes[i]->setRotation(this->sim->bodies[i]->getT() * -180 / std::numbers::pi);
 		this->window.draw(*this->shapes[i]);
 	}
 	if (this->showInfo) {
-		this->info.setString(std::to_string(1 / dt));
+		// Add the current FPS to the buffer
+		double currentFPS = 1.0 / dt;
+		this->fpsBuffer.push_back(currentFPS);
+		if (this->fpsBuffer.size() > this->fpsBufferSize) {
+			this->fpsBuffer.pop_front();
+		}
+
+		// Calculate the average FPS
+		double averageFPS = this->getAverageFPS();
+		this->info.setString(std::to_string(averageFPS));
 		this->window.draw(this->info);
 	}
 	this->window.display();
 }
 
-
+double physicsim::Renderer::getAverageFPS() const {
+	double sum = 0.0;
+	for (double fps : this->fpsBuffer) {
+		sum += fps;
+	}
+	return sum / this->fpsBuffer.size();
+}
 
 physicsim::ShapeGroup::ShapeGroup(std::initializer_list<sf::Shape*> shapes) {
 	for (int i = 0; i < shapes.size(); i++) {

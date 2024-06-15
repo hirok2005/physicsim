@@ -5,22 +5,19 @@
 
 int main() {
 	// setup
-	physicsim::World sim(150, 100);
-	sim.addBody(new physicsim::RigidBody(10, 10, 100, 0, 5, 0, 0, 1));
-	sim.addBody(new physicsim::RigidBody(50, 10, 100, 0, 5, 0, 0, 0.5));
-	sim.addBody(new physicsim::RigidBody(10, 30, 100, 0, 5, 0, 0, 2));
-	sim.addBody(new physicsim::RigidBody(100, 30, 100, 0, 5, 0, 0, 2));
-	sim.addBody(new physicsim::RigidBody(30, 30, 100, 0, 5, 0, 0, 0.01));
-	sim.addBody(new physicsim::RigidBody(60.5, 10, 1000, 0, 5, 0, 0, 1));
-	sim.bodies[0]->addLVel(physicsim::Matrix(2, 1, { 10, 0 }));
-	sim.bodies[2]->addLVel(physicsim::Matrix(2, 1, { 10, 0 }));
-	sim.bodies[3]->addLVel(physicsim::Matrix(2, 1, { -10, 0 }));
-	physicsim::RigidBody* t = new physicsim::RigidBody(50, 10, 100, 0, 5, 0, 0, 1);
-	sim.addBody(t);
-	sim.addBody(new physicsim::RigidBody(50, 50, 100, 0, 5, 0, 0, 1));
-	sim.addBody(new physicsim::RigidBody(46.5, 57.5, 100, 0, 5, 0, 0, 1));
-	sim.addBody(new physicsim::RigidBody(53.5, 57.6, 100, 0, 5, 0, 0, 1));
-	// sim.addBody(new physicsim::RigidBody(10, 10, 0.0000000000001, 0, 5, 0, 0, .5));
+	physicsim::World sim(725, 86);
+	sim.addBody(new physicsim::RigidBody(50, 50, 5, 0, 30, 30, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(10, 10, 2, 0.5, 10, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(0, 20, 1, 0, 1, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(80, 10, 2, 0.5, 5, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(100, 10, 1, 0, 1, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(117, 10, 5, 0, 5, 5, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(50, 90, 5, 0, 5, 5, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(117, 70, 5, 0, 5, 5, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(85, 65, 5, 0, 5, 5, 0, 0, 0.5));
+	// sim.addBody(new physicsim::RigidBody(117, 10, 5, 0, 5, 5, 0, 0, 0.5));
+	// sim.bodies[3]->setLVel(physicsim::Matrix(2, 1, { 0, 0 }));
+	// sim.bodies[5]->setLVel(physicsim::Matrix(2, 1, { -0, 0 }));
 	physicsim::Renderer ren(&sim, true);
 	double dt = 0;
 	while (ren.window.isOpen()) {

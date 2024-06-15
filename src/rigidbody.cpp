@@ -1,6 +1,9 @@
 #include "physicsim/rigidbody.hpp"
+#include "physicsim/constants.hpp"
 #include "physicsim/matrix.hpp"
 #include <stdexcept>
+
+// todo: store radius square and inverse mass
 
 /*! Constructs a rigidobody with given position, mass, angle from horizontal and shape
  */
@@ -31,7 +34,7 @@ physicsim::RigidBody::RigidBody(double x, double y, double m, double theta, doub
 	this->h = h;
 	this->type = physicsim::Rectangle;
 	this->invM = 1 / m;
-	this->I = 12 / m * (h * h + w * w); // inverse moment of inertia
+	this->I = 12 / (m * (h * h + w * w)); // inverse moment of inertia
 	this->torque = 0;
 	this->e = e;
 }
@@ -83,7 +86,7 @@ void physicsim::RigidBody::update(double dt) {
 	this->pos += this->lVel.scalarMultiply(dt);
 	this->f = physicsim::Matrix(2, 1, { 0, 0 });
 	this->theta += this->aVel * dt;
-	this->aVel += this->torque / this->I;
+	this->aVel += this->torque * this->I;
 	this->torque = 0;
 }
 
@@ -132,6 +135,10 @@ physicsim::Matrix physicsim::RigidBody::getLVel() const {
     return this->lVel;
 }
 
+double physicsim::RigidBody::getTheta() const {
+	return this->theta;
+}
+
 double physicsim::RigidBody::getE() const {
 return this->e;
 }
@@ -174,6 +181,7 @@ void physicsim::RigidBody::addPos(const Matrix& pos) {
 
 void physicsim::RigidBody::addTheta(const double& theta) {
 	this->theta += theta;
+	// todo: bound to |theta| <= 2pi 
 }
 
 physicsim::Matrix(*physicsim::RigidBody::getVertices()) [4] {
@@ -186,7 +194,6 @@ void physicsim::RigidBody::getVerticesWorld(physicsim::Matrix(&res)[4]) {
 	for (int i = 0; i < 4; i++) {
 		res[i] = (rotMat * this->vertices[i]) + this->pos;
 	}
-
 }
 
 physicsim::Matrix physicsim::RigidBody::getPos() const {

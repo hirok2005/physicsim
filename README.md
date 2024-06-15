@@ -72,6 +72,7 @@
 
 A physics engine built by a first year uni student and friends for his COMP1101 assignment
 
+**Note: The project is quiet messy and will be cleaned up soon, or you can help with a pull request :)**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -126,6 +127,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Roadmap
 
 - [ ] Finish the engine
+- [ ] Optimise
+- [ ] Add springs, joints etc
+- [ ] Finish README
+- [ ] Tidy up
 
 See the [open issues](https://github.com/hirok2005/physicsim/issues) for a full list of proposed features (and known issues).
 

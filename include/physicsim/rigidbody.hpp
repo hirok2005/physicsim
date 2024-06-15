@@ -37,6 +37,7 @@ namespace physicsim {
 			double getTorque() const;
 			double getInvM() const;
 			Matrix getLVel() const;
+            double getTheta() const;
 			double getE() const;
 			void setLVel(const Matrix& lVel);
 			void setF(const Matrix& f);
