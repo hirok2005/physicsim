@@ -7,17 +7,16 @@ int main() {
 	// setup
 	physicsim::World sim(725, 86);
 	sim.addBody(new physicsim::RigidBody(50, 50, 5, 0, 30, 30, 0, 0, 0.5));
-	// sim.addBody(new physicsim::RigidBody(10, 10, 2, 0.5, 10, 0, 0, 0.5));
-	// sim.addBody(new physicsim::RigidBody(0, 20, 1, 0, 1, 0, 0, 0.5));
-	// sim.addBody(new physicsim::RigidBody(80, 10, 2, 0.5, 5, 0, 0, 0.5));
-	// sim.addBody(new physicsim::RigidBody(100, 10, 1, 0, 1, 0, 0, 0.5));
-	// sim.addBody(new physicsim::RigidBody(117, 10, 5, 0, 5, 5, 0, 0, 0.5));
-	// sim.addBody(new physicsim::RigidBody(50, 90, 5, 0, 5, 5, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(10, 10, 2, 0.5, 10, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(0, 20, 1, 0, 1, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(80, 10, 2, 0.5, 5, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(100, 10, 1, 0, 1, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(117, 10, 5, 0, 5, 5, 0, 0, 0.5));
 	sim.addBody(new physicsim::RigidBody(117, 70, 5, 0, 5, 5, 0, 0, 0.5));
-	// sim.addBody(new physicsim::RigidBody(85, 65, 5, 0, 5, 5, 0, 0, 0.5));
+	sim.addBody(new physicsim::RigidBody(85, 65, 5, 0, 5, 5, 0, 0, 0.5));
 	// sim.addBody(new physicsim::RigidBody(117, 10, 5, 0, 5, 5, 0, 0, 0.5));
-	// sim.bodies[3]->setLVel(physicsim::Matrix(2, 1, { 0, 0 }));
-	// sim.bodies[5]->setLVel(physicsim::Matrix(2, 1, { -0, 0 }));
+	sim.bodies[3]->setLVel(physicsim::Matrix(2, 1, { 2, 0 }));
+	sim.bodies[5]->setLVel(physicsim::Matrix(2, 1, { -2, 0 }));
 	physicsim::Renderer ren(&sim, true);
 	double dt = 0;
 	while (ren.window.isOpen()) {

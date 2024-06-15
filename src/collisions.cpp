@@ -193,7 +193,7 @@ void physicsim::Collisions::rectRectContact(physicsim::RigidBody* body1, physics
 		edge = verts1[(i + 1) % 4] - verts1[i];
 		for (int j = 0; j < 4; j++) {
 			pointOnEdge = verts2[j] - verts1[i];
-			t = pointOnEdge.dot(edge);
+			t = edge.dot(pointOnEdge);
 			if (t >= 0 and t <= 1) {
 				contacts1.push_back(verts2[j]);
 			}
@@ -201,7 +201,7 @@ void physicsim::Collisions::rectRectContact(physicsim::RigidBody* body1, physics
 		edge = verts2[(i + 1) % 4] - verts2[i];
 		for (int j = 0; j < 4; j++) {
 			pointOnEdge = verts1[j] - verts2[i];
-			t = pointOnEdge.dot(edge);
+			t = edge.dot(pointOnEdge);
 			if (t >= 0 and t <= 1) {
 				contacts2.push_back(verts1[j]);
 			}
