@@ -99,6 +99,7 @@ To get a local copy up and running follow these simple example steps.
 
 - C++23
 - CMake ```>= 3.16```
+- SFML ```2.6.1``` (some older versions should work)
 
 ### Installation
 
