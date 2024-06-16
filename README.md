@@ -72,6 +72,8 @@
 
 A physics engine built by a first year uni student and friends for his COMP1101 assignment
 
+This is a 2D impulse based physics engine for rigid bodies, written from scratch with a renderer built with SFML
+
 **Note: The project is quiet messy and will be cleaned up soon, or you can help with a pull request :)**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

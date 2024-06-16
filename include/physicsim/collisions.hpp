@@ -11,6 +11,7 @@ namespace physicsim {
 			double depth;
 			Matrix normal;
 			Matrix point;
+			int index; // for rect rect we can just use the index of the vertex, positive for shape 1, negative for shape 2
 		};
 
 		bool collisionDetect(RigidBody* body1, RigidBody* body2, Manifold& manifold);
@@ -25,8 +26,8 @@ namespace physicsim {
 		void positionalCorrection(RigidBody* body1, RigidBody* body2, const Manifold& manifold);
 		void collisionHandler(RigidBody* body1, RigidBody* body2, double dt);
 		void resolve(RigidBody* body1, RigidBody* body2, const Manifold& manifold);
-		bool sat(const Matrix& edge, std::vector<Matrix> shape1, std::vector<Matrix> shape2, double& depth);
-		void minMax(const Matrix& axis, const std::vector<Matrix>& points, double& min, double& max);
+		bool sat(const Matrix& edge, std::vector<Matrix> shape1, std::vector<Matrix> shape2, double& depth, Manifold& manifold);
+		void minMax(const Matrix& axis, const std::vector<Matrix>& points, double& min, double& max, int& minInd, int& maxInd);
 	}
 };
 

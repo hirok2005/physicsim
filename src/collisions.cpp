@@ -73,7 +73,7 @@ bool physicsim::Collisions::rectCircleCollisionDetect(physicsim::RigidBody* rect
 		r2 = verts[i + 1].project(edgeNorm, true);
 		c1 = circle->getPos() + edgeNorm.scalarMultiply(circle->getR());
 		c2 = circle->getPos() - edgeNorm.scalarMultiply(circle->getR());
-		if (!physicsim::Collisions::sat(edgeNorm, { r1, r2 }, { c1, c2 }, t)) {
+		if (!physicsim::Collisions::sat(edgeNorm, { r1, r2 }, { c1, c2 }, t, manifold)) {
 			return false;
 		}
 		t = edge.vectorMagnitudeSqrd();
@@ -107,7 +107,7 @@ bool physicsim::Collisions::rectCircleCollisionDetect(physicsim::RigidBody* rect
 	// if (edge.dot(rect->getLVel() - circle->getLVel()) > 0) {
 	// 	return false;
 	// }
-	if (!pass && !physicsim::Collisions::sat(edge, { verts[0] , verts[1], verts[2], verts[3] }, { circle->getPos() + edge.scalarMultiply(circle->getR()), circle->getPos() - edge.scalarMultiply(circle->getR()) }, t)) {
+	if (!pass && !physicsim::Collisions::sat(edge, { verts[0] , verts[1], verts[2], verts[3] }, { circle->getPos() + edge.scalarMultiply(circle->getR()), circle->getPos() - edge.scalarMultiply(circle->getR()) }, t, manifold)) {
 		return false;
 	}
 
@@ -130,28 +130,32 @@ bool physicsim::Collisions::rectRectCollisionDetect(physicsim::RigidBody* rect1,
 	double minDepth = std::numeric_limits<double>::infinity();
 	physicsim::Matrix norm;
 	physicsim::Matrix edge;
+	int ind;
 	for (int i = 0; i < 2; i++) {
 		edge = verts1[(i + 1) % 4] - verts1[i];
 		edge = edge.normalise();
-		if (!physicsim::Collisions::sat(edge, { verts1[i], verts1[(i + 1) % 4] }, { verts2[0], verts2[1], verts2[2], verts2[3] }, depth)) {
+		if (!physicsim::Collisions::sat(edge, { verts1[i], verts1[(i + 1) % 4] }, { verts2[0], verts2[1], verts2[2], verts2[3] }, depth, manifold)) {
 			return false;
 		}
 		if (depth < minDepth) {
 			minDepth = depth;
 			norm = edge;
+			ind = manifold.index;
 		}
 		edge = verts2[(i + 1) % 4] - verts2[i];
 		edge = edge.normalise();
-		if (!physicsim::Collisions::sat(edge, { verts1[0], verts1[1], verts1[2], verts1[3] }, { verts2[i], verts2[(i + 1) % 4] }, depth)) {
+		if (!physicsim::Collisions::sat(edge, { verts2[i], verts2[(i + 1) % 4] }, { verts1[0], verts1[1], verts1[2], verts1[3] }, depth, manifold)) {
 			return false;
 		}
 		if (depth < minDepth) {
 			minDepth = depth;
 			norm = edge;
+			ind = -manifold.index;
 		}
 	}
 	manifold.depth = minDepth;
 	manifold.normal = norm;
+	manifold.index = ind;
 	if (manifold.normal.dot(rect2->getPos() - rect1->getPos()) < 0) {
 		manifold.normal = manifold.normal.scalarMultiply(-1);
 	}
@@ -182,50 +186,14 @@ void physicsim::Collisions::circleCircleContact(physicsim::RigidBody* body1, phy
 }
 
 void physicsim::Collisions::rectRectContact(physicsim::RigidBody* body1, physicsim::RigidBody* body2, physicsim::Collisions::Manifold& manifold) {
-	physicsim::Matrix edge, pointOnEdge;
-	physicsim::Matrix verts1[4];
-	physicsim::Matrix verts2[4];
-	double t;
-	body1->getVerticesWorld(verts1);
-	body2->getVerticesWorld(verts2);
-	std::vector<physicsim::Matrix> contacts1, contacts2;
-	for (int i = 0; i < 4; i++) {
-		edge = verts1[(i + 1) % 4] - verts1[i];
-		for (int j = 0; j < 4; j++) {
-			pointOnEdge = verts2[j] - verts1[i];
-			t = edge.dot(pointOnEdge);
-			if (t >= 0 and t <= 1) {
-				contacts1.push_back(verts2[j]);
-			}
-		}
-		edge = verts2[(i + 1) % 4] - verts2[i];
-		for (int j = 0; j < 4; j++) {
-			pointOnEdge = verts1[j] - verts2[i];
-			t = edge.dot(pointOnEdge);
-			if (t >= 0 and t <= 1) {
-				contacts2.push_back(verts1[j]);
-			}
-		}
-	}
-	if (contacts1.size() == 2) {
-		manifold.point = contacts1[0] + (contacts1[1] - contacts1[0]).scalarMultiply(0.5);
+	physicsim::Matrix points[4];
+	if (manifold.index > 0) {
+		body2->getVerticesWorld(points);
+		manifold.point = points[manifold.index - 1];
 		return;
 	}
-	if (contacts2.size() == 2) {
-		manifold.point = contacts2[0] + (contacts2[1] - contacts2[0]).scalarMultiply(0.5);
-		return;
-	}
-	if (contacts1.size() == 1 && contacts2.size() == 1) {
-		manifold.point = contacts1[0] + (contacts2[0] - contacts1[0]).scalarMultiply(0.5);
-		return;
-	}
-	if (contacts1.size() == 1) {
-		manifold.point = contacts1[0];
-	}
-
-	if (contacts2.size() == 1) {
-		manifold.point = contacts2[0];
-	}
+	body1->getVerticesWorld(points);
+	manifold.point = points[std::abs(manifold.index + 1)];
 }
 
 void physicsim::Collisions::rectCircleContact(physicsim::RigidBody* rect, physicsim::RigidBody* circle, physicsim::Collisions::Manifold& manifold) {
@@ -301,7 +269,7 @@ void physicsim::Collisions::resolve(RigidBody* body1, RigidBody* body2, const Ma
 	}
 }
 
-bool physicsim::Collisions::sat(const physicsim::Matrix& edge, std::vector<physicsim::Matrix> shape1, std::vector<physicsim::Matrix> shape2, double& depth) {
+bool physicsim::Collisions::sat(const physicsim::Matrix& edge, std::vector<physicsim::Matrix> shape1, std::vector<physicsim::Matrix> shape2, double& depth, physicsim::Collisions::Manifold& manifold) {
 	for (int i = 0; i < shape1.size(); i++) {
 		shape1[i] = shape1[i].project(edge, true);
 	}
@@ -310,12 +278,17 @@ bool physicsim::Collisions::sat(const physicsim::Matrix& edge, std::vector<physi
 	}
 	double min1, max1, min2, max2;
 
-	physicsim::Collisions::minMax(edge, shape1, min1, max1);
-	physicsim::Collisions::minMax(edge, shape2, min2, max2);
+	int minInd, maxInd;
+	physicsim::Collisions::minMax(edge, shape1, min1, max1, minInd, maxInd);
+	physicsim::Collisions::minMax(edge, shape2, min2, max2, minInd, maxInd);
 
-	double overlap1 = max1 - min2;
+	depth = max1 - min2;
 	double overlap2 = max2 - min1;
-	depth = std::min(overlap1, overlap2);
+	manifold.index = minInd + 1;
+	if (overlap2 < depth) {
+		depth = overlap2;
+		manifold.index = maxInd+ 1;
+	}
 	// depth = std::min(max1, max2)- std::min(min1, min2);
 
 	return !(max1 < min2 || max2 < min1);
@@ -327,18 +300,21 @@ bool physicsim::Collisions::sat(const physicsim::Matrix& edge, std::vector<physi
   no of points must be >= 2
   assumings vectors are 2D
 */
-void physicsim::Collisions::minMax(const physicsim::Matrix& axis, const std::vector<physicsim::Matrix>& points, double& min, double& max) {
+void physicsim::Collisions::minMax(const physicsim::Matrix& axis, const std::vector<physicsim::Matrix>& points, double& min, double& max, int& minInd, int& maxInd) {
 	min = std::numeric_limits<double>::infinity();
 	max = -std::numeric_limits<double>::infinity();
-
+	int i = 0;
 	for (const physicsim::Matrix& point : points) {
 		// Assuming the points are already projections onto the axis
 		double projection = point.dot(axis);
 		if (projection < min) {
 			min = projection;
+			minInd = i;
 		}
 		if (projection > max) {
 			max = projection;
+			maxInd = i;
 		}
+		i++;
 	}
 }
